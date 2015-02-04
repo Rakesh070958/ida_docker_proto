@@ -1,0 +1,123 @@
+/*
+ * Main gradle file for building, testing, creating distribution for teradata module
+ *
+ * author: Dumitru Ciubenco
+ * created: 23.01.2015
+ * master branch
+ */
+
+apply plugin: 'groovy'
+apply plugin: 'idea'
+apply plugin: 'distribution'
+apply plugin: 'maven-publish'
+
+version = "1.0"
+status = "development"
+description = "Teradata scripts"
+ext.isReleaseVersion = false;
+
+if (!project.hasProperty('release') || project.getProperty('release') == 'false') {
+    version += "-SNAPSHOT"
+    ext.isReleaseVersion = false;
+}else{
+    ext.isReleaseVersion = true;
+}
+
+if (project.hasProperty('profile')) {
+    ext.profile = project.getProperty('profile')
+} else {
+    println("No profiles was specified, test profile will be used by default");
+    ext.profile = 'test'
+}
+group = "com.siemens.ida.sp5." + ext.profile
+apply from: '/src/profiles/' + ext.profile + '.gradle'
+
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.4.0'
+
+    testCompile 'org.codehaus.groovy:groovy-all:2.4.0'
+    testCompile 'junit:junit:4.11'
+}
+sourceSets {
+    main {
+        groovy {
+            srcDirs = ['src/main/groovy']
+        }
+    }
+
+    test {
+        groovy {
+            srcDirs = ['src/test']
+        }
+    }
+
+}
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact dist {
+            }
+        }
+    }
+
+}
+import org.apache.tools.ant.filters.ReplaceTokens
+
+test {
+    testLogging {
+        // Show that tests are run in the command-line output
+        events 'started', 'passed'
+    }
+}
+
+task prepareTestScripts(type: Copy) {
+    from 'src/test/scripts'
+    into "$buildDir/output/test-scripts"
+
+    filter(ReplaceTokens, tokens: [hostname: hostname])
+    filter(ReplaceTokens, tokens: [profile: profile])
+}
+
+task prepareGroovy(type: Copy) {
+    from 'src/main/groovy'
+    into "$buildDir/output/groovy"
+
+    filter(ReplaceTokens, tokens: [hostname: hostname])
+    filter(ReplaceTokens, tokens: [profile: profile])
+}
+
+task prepareScripts(type: Copy, dependsOn: prepareGroovy) {
+    from 'src/main/scripts'
+    into "$buildDir/output/scripts"
+
+    filter(ReplaceTokens, tokens: [hostname: hostname])
+    filter(ReplaceTokens, tokens: [profile: profile])
+}
+
+task prepareLib(type: Copy, dependsOn: prepareScripts) {
+    from configurations.runtime
+    into "$buildDir/output/libs"
+
+}
+
+task dist(type: Zip, dependsOn: prepareLib) {
+//    classifier = profile
+
+    from(project.buildDir.path + '/output/scripts') {
+        into 'scripts'
+    }
+    from(project.buildDir.path + '/output/groovy') {
+        into 'groovy'
+    }
+    from('src/main/bin') {
+        into 'bin'
+    }
+    from(project.buildDir.path + '/output/libs') {
+        into 'lib'
+    }
+}
+
+build.dependsOn(dist)
+compileGroovy.dependsOn([prepareTestScripts, prepareScripts])
+
