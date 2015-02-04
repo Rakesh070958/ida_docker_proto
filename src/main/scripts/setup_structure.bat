@@ -11,6 +11,6 @@ echo ####################################################################
 echo profile  = @profile@
 echo hostname = @hostname@
 echo ####################################################################
-md "d:\temp2"
-md "d:\temp2\x1"
-md "d:\temp2\x2"
+rem md "d:\temp2"
+rem md "d:\temp2\x1"
+rem md "d:\temp2\x2"

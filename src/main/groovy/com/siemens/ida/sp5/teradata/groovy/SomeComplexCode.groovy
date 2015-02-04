@@ -1,4 +1,4 @@
-package com.siemens.ida.sp5.hadoop.groovy
+package com.siemens.ida.sp5.teradata.groovy
 
 /**
  * Just a dummy class which demonstrates that it is also possible to put deployment logic also here 

@@ -19,7 +19,7 @@ ext.isReleaseVersion = false;
 if (!project.hasProperty('release') || project.getProperty('release') == 'false') {
     version += "-SNAPSHOT"
     ext.isReleaseVersion = false;
-}else{
+} else {
     ext.isReleaseVersion = true;
 }
 
@@ -78,8 +78,14 @@ task prepareTestScripts(type: Copy) {
     filter(ReplaceTokens, tokens: [hostname: hostname])
     filter(ReplaceTokens, tokens: [profile: profile])
 }
+task prepareBin(type: Copy) {
+    from 'src/main/bin'
+    into "$buildDir/output/bin"
 
-task prepareGroovy(type: Copy) {
+    filter(ReplaceTokens, tokens: [hostname: hostname])
+    filter(ReplaceTokens, tokens: [profile: profile])
+}
+task prepareGroovy(type: Copy, dependsOn: prepareBin) {
     from 'src/main/groovy'
     into "$buildDir/output/groovy"
 
@@ -119,5 +125,6 @@ task dist(type: Zip, dependsOn: prepareLib) {
 }
 
 build.dependsOn(dist)
+distZip.dependsOn(dist)
 compileGroovy.dependsOn([prepareTestScripts, prepareScripts])
 
