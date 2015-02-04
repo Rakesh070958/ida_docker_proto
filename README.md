@@ -1,0 +1,1 @@
+scripts/code that set up one or more tenants  including security, data lake, discovery store etc in teradata
