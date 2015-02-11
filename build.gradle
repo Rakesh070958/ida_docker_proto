@@ -1,0 +1,22 @@
+/*
+ * Main gradle file for building, testing, creating distribution for hadoop module
+ *
+ * author: Dumitru Ciubenco
+ * created: 23.01.2015
+ * master branch
+ */
+apply plugin: 'com.siemens.sp5.da'
+
+
+version = "1.0"
+status = "development"
+description = "Teradata scripts"
+config {
+    type 'tenant'
+}
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.4.0'
+    testCompile 'org.codehaus.groovy:groovy-all:2.4.0'
+    testCompile 'junit:junit:4.11'
+}

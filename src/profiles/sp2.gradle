@@ -1,0 +1,9 @@
+/*
+ * This file contains all customizations needed for building the project for sp2
+ *
+ * author: Dumitru Ciubenco
+ * created: 23.01.2015
+ */
+
+ext.profile = 'SP2'
+ext.hostname = 'sp2.hostname'
