@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
  * This file contains all customizations needed for building the project for sp1
  *
@@ -6,4 +7,14 @@
  */
 
 ext.profile = 'SP1'
+=======
+/*
+ * This file contains all customizations needed for building the project for sp1
+ *
+ * author: Dumitru Ciubenco
+ * created: 23.01.2015
+ */
+
+ext.profile = 'SP1'
+>>>>>>> 42c0e72515adbfe448a3039d13da02f45e943f2a
 ext.hostname = 'sp1.hostname'

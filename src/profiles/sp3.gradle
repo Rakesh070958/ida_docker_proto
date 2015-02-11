@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
  * This file contains all customizations needed for building the project for sp3
  *
@@ -6,4 +7,14 @@
  */
 
 ext.profile = 'SP3'
+=======
+/*
+ * This file contains all customizations needed for building the project for sp3
+ *
+ * author: Dumitru Ciubenco
+ * created: 23.01.2015
+ */
+
+ext.profile = 'SP3'
+>>>>>>> 42c0e72515adbfe448a3039d13da02f45e943f2a
 ext.hostname = 'sp3.hostname'
