@@ -1,0 +1,24 @@
+bteq << EOF
+
+/*
+* script for cleaning the structure for landlord
+* author: Ana - Maria MUSAT
+*/
+
+.LOGON $servername/$superuser,$superuser_password;
+
+.width 200;
+.set errorout stdout;
+
+/*
+* Clean landlord
+*/
+
+DROP PROFILE $profile_landlord;
+DROP TABLE $landlord.projectlog;
+DROP ROLE $ro_landlord_admin;
+DROP USER $landlord;
+
+.LOGOFF;
+.QUIT;
+EOF

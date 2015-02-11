@@ -1,0 +1,26 @@
+bteq << EOF
+
+.LOGON $servername/$superuser,$superuser_password;
+
+/*
+* script for cleaning the structure
+* author: Ana - Maria MUSAT
+*/
+
+.width 200;
+.set errorout stdout;
+
+/*
+* Clean environment
+*/
+
+DROP PROFILE $profile_env;
+DROP TABLE $env_name.trends;
+DROP ROLE $ro_name;
+DROP USER $user_from_tenant;
+DROP DATABASE $env_name;
+
+.LOGOFF;
+.QUIT;
+EOF
+

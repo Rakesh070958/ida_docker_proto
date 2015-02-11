@@ -1,0 +1,28 @@
+bteq << EOF
+
+.LOGON $servername/$superuser,$superuser_password;
+
+/*
+* script for cleaning the tenant
+* author: Ana - Maria MUSAT
+*/
+
+.width 200;
+.set errorout stdout;
+
+/*
+* Clean the tenant
+*/
+
+DROP PROFILE $profile_tenant;
+DROP ROLE $ro_tenant_admin;
+DROP ROLE $ro_tenant_select;
+DROP USER $user_name_admin;
+DROP USER $user_name_scientist;
+DROP DATABASE $env_usr;
+DROP USER $landlord_tenant;
+
+.LOGOFF;
+.QUIT;
+EOF
+

@@ -1,0 +1,37 @@
+
+bteq << EOF
+
+/*
+ * script for crating users inside of a tenant
+ * author: Ana - Maria MUSAT
+ */
+
+
+.LOGON $servername/$superuser,$superuser_password;
+
+.width 200;
+.set errorout stdout;
+
+/*
+* Now create the users and grant the different profiles to them.
+*/  
+CREATE USER $user_name FROM $env_usr AS
+  PASSWORD = pass_1234,
+  PERMANENT = 0,
+  ACCOUNT = '$M0+$user_name&S&D&H$',
+  PROFILE = $profile_env,
+  DEFAULT ROLE = ALL,
+  DEFAULT DATABASE = $landlord_tenant;  
+ 
+GRANT $ro_name TO $user_name;
+
+/* 
+* Modify the password - 
+* this ensures that it won't be necessary to change the password at the first login 
+*/
+
+MODIFY USER $user_name AS PASSWORD = pass_1234;
+
+.LOGOFF;
+.QUIT;
+EOF

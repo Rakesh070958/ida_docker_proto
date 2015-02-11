@@ -1,0 +1,90 @@
+bteq << EOF
+
+/*
+ * script for crating the landlord
+ * author: Ana - Maria MUSAT
+ */
+
+.LOGON $servername/$superuser,$superuser_password;
+
+.width 200;
+.set errorout stdout;
+
+/* 
+* Create the landlord
+*/
+
+CREATE PROFILE $profile_landlord AS
+    ACCOUNT = ('$M0+$landlord&S&D&H', '$H0+$landlord&S&D&H'),
+    DEFAULT DATABASE = $landlord,
+    PASSWORD=(EXPIRE=90, MAXLOGONATTEMPTS=10, MINCHAR=8, MAXCHAR=16, SPECCHAR='M', DIGITS ='R', REUSE =1);
+
+
+CREATE USER $landlord FROM  $superuser  AS
+	PASSWORD = pass_1234,
+	PERMANENT = $landlord_perm_space,
+	COLLATION = ASCII,
+	NO FALLBACK,
+	NO BEFORE JOURNAL,
+	NO AFTER JOURNAL,
+	PROFILE = $profile_landlord,
+	DEFAULT ROLE = ALL,
+	DEFAULT DATABASE = $landlord
+	TIME ZONE = NULL,
+	DATEFORM  =  ANSIDATE,
+	DEFAULT CHARACTER SET UNICODE;
+
+/* 
+ * Modify the password - 
+ * this ensures that it won't be necessary to change the password at the first login 
+ */
+MODIFY USER $landlord AS PASSWORD = pass_1234;
+
+
+/*
+* now give the right to create users to the landlord and revoke it from the newly instantiated project user
+*/
+GRANT ALL ON $landlord TO $superuser WITH GRANT OPTION;
+GRANT CREATE USER, CREATE DATABASE, DROP USER, DROP DATABASE ON $landlord TO $superuser WITH GRANT OPTION;
+
+/*
+local administrators should not have rights for creating or dropping users
+REVOKE CREATE USER, DROP USER ON $landlord FROM $landlord;
+
+/*
+* CREATE default role
+*/
+
+select 1 from dbc.roles where RoleName='$ro_landlord_admin';
+.IF ACTIVITYCOUNT>0 THEN .GOTO CreateRoles
+CREATE ROLE $ro_landlord_admin;
+.LABEL CreateRoles
+
+
+/*
+* CREATE THE PROJECT LOG TABLE
+*/
+
+select 1 from dbc.tables where DatabaseName='$landlord' and TableName='projectlog' and TableKind='T';
+.IF ACTIVITYCOUNT>0 THEN .GOTO SkipCreateProjectlogTable
+
+CREATE TABLE $landlord.projectlog 
+    , NO FALLBACK
+    , NO BEFORE JOURNAL
+    , NO AFTER JOURNAL
+    , CHECKSUM = DEFAULT
+      (script_file VARCHAR (120)
+      , action_date DATE
+      , action_performed VARCHAR (120)
+    )
+PRIMARY INDEX scriptfile (script_file);
+
+GRANT SELECT, INSERT  ON $landlord.projectlog TO $ro_landlord_admin;
+
+INSERT INTO $landlord.projectlog VALUES ('1_create_tenant.bteq', '2014-12-09', 'CREATE PROJECT SKELETON');
+
+.LABEL SkipCreateProjectlogTable
+
+.LOGOFF;
+.QUIT;
+EOF

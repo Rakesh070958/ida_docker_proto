@@ -1,0 +1,30 @@
+
+bteq << EOF
+
+/*
+ * script for crating teradata tables from a tenant
+ * author: Ana - Maria MUSAT
+ */
+
+.LOGON $servername/$user_from_tenant,pass_1234;
+
+.set width 200;
+.set errorout stdout;
+
+CREATE MULTISET TABLE $db_name.trends, NO FALLBACK,
+NO BEFORE JOURNAL,
+NO AFTER JOURNAL,
+CHECKSUM = DEFAULT,
+DEFAULT MERGEBLOCKRATIO
+(
+Plant_id BIGINT NOT NULL,
+Sensor_id BIGINT NOT NULL,
+TS TIMESTAMP(6) NOT NULL,
+Sensor_val FLOAT)
+UNIQUE PRIMARY INDEX (Plant_Id, Sensor_id, TS)
+PARTITION BY RANGE_N(TS BETWEEN TIMESTAMP '2013-01-01 00:00:00+00:00' AND TIMESTAMP '2017-12-31 23:59:59+00:00' EACH INTERVAL '1' DAY, NO RANGE OR UNKNOWN);
+
+.LOGOFF;
+.QUIT;
+EOF
+

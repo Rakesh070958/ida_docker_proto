@@ -1,0 +1,34 @@
+bteq << EOF
+
+/*
+ * script for crating roles for tenant
+ * author: Ana - Maria MUSAT
+ */
+
+.LOGON $servername/$superuser,$superuser_password;
+
+.width 200;
+.set errorout stdout;
+
+/*
+* CREATE default roles
+*/
+
+CREATE ROLE $ro_name;
+
+/*
+* GRANT rights to ADMINISTRATOR role - for the landlord
+*/
+GRANT ALL BUT CREATE USER,DROP USER ON $env_name TO $ro_landlord_admin;
+GRANT ALL BUT CREATE USER,DROP USER ON $env_name TO $ro_tenant_admin;
+GRANT SELECT ON $env_name TO $ro_tenant_select;
+
+/*
+* GRANT rights to role
+*/ 
+*GRANT ALL BUT CREATE USER,DROP USER ON $env_name TO $ro_name;
+GRANT ALL BUT CREATE DATABASE,DROP DATABASE,CREATE USER,DROP USER ON $env_name TO $ro_name;
+
+.LOGOFF;
+.QUIT;
+EOF

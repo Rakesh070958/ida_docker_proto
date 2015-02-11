@@ -1,0 +1,25 @@
+bteq << EOF
+
+/* 
+* Script for creating the database structure from inside of a tenant
+* author: Ana-Maria MUSAT
+*/
+
+.LOGON $servername/$superuser,$superuser_password;
+
+.width 200;
+.set errorout stdout;
+
+/*
+ * CREATE the databases and assign the necessary space to them
+ * the size of the databases is matter to some arithmetics
+ */
+
+CREATE DATABASE $db_name FROM $env_name AS
+  PERM = $db_perm_space BYTE,
+  ACCOUNT = '$M0+$db_name&M&H&S$';
+
+
+.LOGOFF;
+.QUIT;
+EOF

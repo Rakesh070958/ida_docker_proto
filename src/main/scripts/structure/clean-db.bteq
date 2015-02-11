@@ -1,0 +1,24 @@
+bteq << EOF
+
+.LOGON $servername/$superuser,$superuser_password;
+
+/*
+* script for cleaning the database
+* author: Ana - Maria MUSAT
+*/
+
+.width 200;
+.set errorout stdout;
+
+/*
+* Clean
+*/
+
+DROP TABLE $db_name.trends;
+DROP DATABASE $db_name;
+DROP ROLE $ro_db_name;
+
+.LOGOFF;
+.QUIT;
+EOF
+
