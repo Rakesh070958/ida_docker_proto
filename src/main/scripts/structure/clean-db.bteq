@@ -3,21 +3,89 @@ bteq << EOF
 .LOGON $servername/$superuser,$superuser_password;
 
 /*
-* script for cleaning the database
+* Clean-database: script for cleaning the database
 * author: Ana - Maria MUSAT
 */
 
 .width 200;
 .set errorout stdout;
 
-/*
-* Clean
-*/
-
+select 1 from dbc.tables where DatabaseName='$db_name' and TableName='trends' and TableKind='T';
+.IF ACTIVITYCOUNT=0 THEN .GOTO SkipDropTableTrends
 DROP TABLE $db_name.trends;
-DROP DATABASE $db_name;
+
+.LABEL SkipDropTableTrends
+select 1 from dbc.tables where DatabaseName='$db_name' and TableName='$table_db_qg' and TableKind='T';
+.IF ACTIVITYCOUNT=0 THEN .GOTO SkipDropTableTrendsQG
+DROP TABLE $db_name.$table_db_qg;
+
+.LABEL SkipDropTableTrendsQG
+select 1 from dbc.tables where DatabaseName='$db_name' and TableName='$view_db_qg' and TableKind='V';
+.IF ACTIVITYCOUNT=0 THEN .GOTO SkipDropView
+DROP VIEW $db_name.$view_db_qg;
+
+.LABEL SkipDropView
+*select 1 from dbc.tables where DatabaseName='$db_name' and TableName='$view_db_qg_restricted' and TableKind='V';
+*.IF ACTIVITYCOUNT=0 THEN .GOTO SkipDropViewRestricted
+DROP VIEW $db_name.$view_db_qg_restricted;
+
+*.LABEL SkipDropViewRestricted
+select 1 from dbc.roles where RoleName='$ro_db_name';
+.IF ACTIVITYCOUNT=0 THEN .GOTO SkipDropRoleDatabase
 DROP ROLE $ro_db_name;
 
+.LABEL SkipDropRoleDatabase
+select 1 from dbc.roles where RoleName='$ro_db_name_restricted';
+.IF ACTIVITYCOUNT=0 THEN .GOTO SkipDropRoleRestrictedDatabase
+DROP ROLE $ro_db_name_restricted;
+
+.LABEL SkipDropRoleRestrictedDatabase
+/*
+* Role that is granted CREATE SERVER on TD_SERVER_DB
+*/
+select 1 from dbc.roles where RoleName='$ro_db_server_object';
+.IF ACTIVITYCOUNT=0 THEN .GOTO SkipDropRoleServerObject
+DROP ROLE $ro_db_server_object;
+
+.LABEL SkipDropRoleServerObject
+select 1 from dbc.roles where RoleName='$ro_db_server_object_select';
+.IF ACTIVITYCOUNT=0 THEN .GOTO SkipDropRoleServerSelect
+DROP ROLE $ro_db_server_object_select;
+
+.LABEL SkipDropRoleServerSelect
+select 1 from dbc.roles where RoleName='$ro_db_server_object_insert';
+.IF ACTIVITYCOUNT=0 THEN .GOTO SkipDropRoleServerInsert
+DROP ROLE $ro_db_server_object_insert;
+
+.LABEL SkipDropRoleServerInsert
+/*
+* Drop server object
+*/
+select 1 from dbc.ServerV where ServerName='$server_object_db';
+.IF ACTIVITYCOUNT=0 THEN .GOTO SkipDropServerObject
+DROP FOREIGN SERVER TD_SERVER_DB.$server_object_db;
+
+.LABEL SkipDropServerObject
+select 1 from dbc.users where UserName='$user_db_name';
+.IF ACTIVITYCOUNT=0 THEN .GOTO SkipDropUser
+DROP USER $user_db_name;
+
+.LABEL SkipDropUser
+select 1 from dbc.users where UserName='$user_db_name_restricted';
+.IF ACTIVITYCOUNT=0 THEN .GOTO SkipDropUserRestricted
+DROP USER $user_db_name_restricted;
+
+.LABEL SkipDropUserRestricted
+select 1 from dbc.databases where DatabaseName='$db_name';
+.IF ACTIVITYCOUNT=0 THEN .GOTO SkipDropDatabase
+DROP DATABASE $db_name;
+
+.LABEL SkipDropDatabase
+select 1 from dbc.users where profilename='$profile_db';
+.IF ACTIVITYCOUNT=0 THEN .GOTO SkipDropProfile
+DROP PROFILE $profile_db;
+
+.LABEL SkipDropProfile
 .LOGOFF;
 .QUIT;
 EOF

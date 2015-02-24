@@ -2,7 +2,7 @@
 bteq << EOF
 
 /*
- * Create-environment-user: Script for crating users inside of an environment
+ * Create-database-user: script for crating users inside of a database
  * author: Ana - Maria MUSAT
  */
 
@@ -14,22 +14,22 @@ bteq << EOF
 /*
 * Now create the users and grant the different profiles to them.
 */  
-CREATE USER $user_name FROM $env_usr AS
+CREATE USER $user_db_name FROM $env_usr AS
   PASSWORD = pass_1234,
   PERMANENT = 0,
-  ACCOUNT = '$M0+$user_name&S&D&H$',
+  ACCOUNT = '$M0+$user_db_name&S&D&H$',
   PROFILE = $profile_env,
   DEFAULT ROLE = ALL,
   DEFAULT DATABASE = $landlord_tenant;  
  
-GRANT $ro_name TO $user_name;
+GRANT $ro_db_name TO $user_db_name;
 
 /* 
 * Modify the password - 
 * this ensures that it won't be necessary to change the password at the first login 
 */
 
-MODIFY USER $user_name AS PASSWORD = pass_1234;
+MODIFY USER $user_db_name AS PASSWORD = pass_1234;
 
 .LOGOFF;
 .QUIT;

@@ -1,7 +1,7 @@
 bteq << EOF
 
 /*
- * script for crating roles for tenant
+ * Create-database-roles: script for crating roles for tenant
  * author: Ana - Maria MUSAT
  */
 
@@ -9,10 +9,6 @@ bteq << EOF
 
 .width 200;
 .set errorout stdout;
-
-/*
-* CREATE database roles
-*/
 
 CREATE ROLE $ro_db_name;
 
@@ -27,7 +23,6 @@ GRANT SELECT ON $db_name TO $ro_tenant_select;
 /*
 * GRANT rights to role
 */ 
-*GRANT ALL BUT CREATE USER,DROP USER ON $env_name TO $ro_name;
 GRANT ALL BUT CREATE DATABASE,DROP DATABASE,CREATE USER,DROP USER ON $db_name TO $ro_db_name;
 
 .LOGOFF;

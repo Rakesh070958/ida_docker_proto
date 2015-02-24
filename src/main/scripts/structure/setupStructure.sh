@@ -1,15 +1,17 @@
 #!/bin/bash
-landlord=@setup.landlord@
-tenants="@setup.tenants@"
+
+source ./utilities.sh
+landlord=PS
+tenants="USI GTOP"
 
 #environments
 echo -----the list of environments in which tables will be created
-environments="@setup.environments@"
+environments="DEV PRD"
 
 echo -----the list of databases in which tables will be created
-databases="@setup.databases@"
+databases="PUB SEM"
 
-landlord_perm_space=@setup.landlord_perm_space@
+landlord_perm_space=1000000000
 
 export landlord
 export tenants
@@ -26,6 +28,8 @@ echo landlord perm space $landlord_perm_space
 # set the database ip, superuser username and superuser password
 source ./general-settings.sh
 
+
+echo "$(COL "Running UNINSTALL procedure --------------------------------------" 90)"
 sh ./clean.sh
 
 sh ./create-structure.sh

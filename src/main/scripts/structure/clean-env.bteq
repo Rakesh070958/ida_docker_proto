@@ -3,22 +3,33 @@ bteq << EOF
 .LOGON $servername/$superuser,$superuser_password;
 
 /*
-* script for cleaning the structure
+* Clean-environment: script for cleaning the structure
 * author: Ana - Maria MUSAT
 */
 
 .width 200;
 .set errorout stdout;
 
-/*
-* Clean environment
-*/
-
-DROP PROFILE $profile_env;
-DROP TABLE $env_name.trends;
+select 1 from dbc.roles where RoleName='$ro_name';
+.IF ACTIVITYCOUNT=0 THEN .GOTO SkipDropRoleEnvironment
 DROP ROLE $ro_name;
+
+.LABEL SkipDropRoleEnvironment
+select 1 from dbc.users where UserName='$user_from_tenant';
+.IF ACTIVITYCOUNT=0 THEN .GOTO SkipDropUser
 DROP USER $user_from_tenant;
+
+.LABEL SkipDropUser
+select 1 from dbc.databases where DatabaseName='$env_name';
+.IF ACTIVITYCOUNT=0 THEN .GOTO SkipDropDatabase
 DROP DATABASE $env_name;
+
+.LABEL SkipDropDatabase
+select 1 from dbc.users where profilename='$profile_env';
+.IF ACTIVITYCOUNT=0 THEN .GOTO SkipDropProfile
+DROP PROFILE $profile_env;
+
+.LABEL SkipDropProfile
 
 .LOGOFF;
 .QUIT;

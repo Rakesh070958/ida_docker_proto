@@ -1,7 +1,7 @@
 bteq << EOF
 
 /* 
-* Script for creating the database structure from inside of a tenant
+* Create-environment-USR-database: Script for creating the USR database from inside of an environment
 * author: Ana-Maria MUSAT
 */
 

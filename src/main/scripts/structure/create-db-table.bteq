@@ -2,11 +2,11 @@
 bteq << EOF
 
 /*
- * script for crating teradata tables from a tenant
+ * Create-database-tables: script for crating teradata tables from a tenant
  * author: Ana - Maria MUSAT
  */
 
-.LOGON $servername/$user_from_tenant,pass_1234;
+.LOGON $servername/$user_db_name,pass_1234;
 
 .set width 200;
 .set errorout stdout;

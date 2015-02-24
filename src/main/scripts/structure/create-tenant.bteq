@@ -1,7 +1,7 @@
 bteq << EOF
 
 /*
- * script for crating a tenant
+ * Create-tenant:Script for crating a tenant
  * author: Ana - Maria MUSAT
  */
 
@@ -14,12 +14,10 @@ bteq << EOF
 /*
  * CREATE the default profile for the tenant
  */
-
 CREATE PROFILE $profile_tenant AS
     ACCOUNT = ('$M0+$landlord_tenant&S&D&H', '$H0+$landlord_tenant&S&D&H'),
     DEFAULT DATABASE = $landlord_tenant,
     PASSWORD=(EXPIRE=90, MAXLOGONATTEMPTS=10, MINCHAR=8, MAXCHAR=16, SPECCHAR='M', DIGITS ='R', REUSE =1);
-
 
 CREATE USER $landlord_tenant FROM  $landlord  AS
         PASSWORD = pass_1234,
@@ -55,7 +53,6 @@ CREATE ROLE $ro_tenant_admin;
 /* create role '$ro_tenant_admin' */
 CREATE ROLE $ro_tenant_select;
 
-
 /*
 * GRANT rights to ADMINISTRATOR role - for the landlord
 */
@@ -83,7 +80,6 @@ GRANT $ro_landlord_admin TO $landlord WITH ADMIN OPTION;
 * GRANT rights to ADMINISTRATOR role - for the tenant
 */
 GRANT $ro_tenant_admin TO $landlord_tenant WITH ADMIN OPTION;
-
 
 .LOGOFF;
 .QUIT;

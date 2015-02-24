@@ -15,6 +15,13 @@ source ./settings-env.sh
 echo ----------------- Clean databases
 for database in $databases; do
 source ./settings-db.sh
+hive -S -f drop-hive-database.hql -hiveconf hive_table=$hive_database_qg.$table_db_qg -hiveconf hive_database=$hive_database_qg > out.log 
+#>> out.log
+
+#hive -e \"DROP TABLE $hive_database_qg.$table_db_qg;\"
+#hive -e \"DROP DATABASE $hive_database_qg;\"
+
+
 sh ./clean-db.bteq
 done
 

@@ -1,14 +1,15 @@
 #!/bin/bash
 
-env_name=@environment.name@
-env_usr=@environment.user@
-user_from_tenant=@environment.user.from.tenant@
-user_name=@environment.username@
-user_name_admin=@environment.username.admin@
-user_name_scientist=@environment.username.scientist@
-ro_name=@environment.rolename@
-profile_env=@environment.profile@
-env_perm_space=@environment.permsize.formula@
+echo ---------------- Environment settings-------------
+env_name="$landlord"_"$tenant"_"$environment"
+env_usr="$landlord"_"$tenant"_USR
+user_from_tenant="$landlord"_"$tenant"_USR_"$environment"
+user_name="$landlord"_"$tenant"_USR_"$environment"
+user_name_admin="$landlord"_"$tenant"_USR_ADMIN
+user_name_scientist="$landlord"_"$tenant"_USR_SCIENTIST
+ro_name=RO_"$landlord"_"$tenant"_"$environment"
+profile_env=PR_"$landlord"_"$tenant"_"$environment"
+env_perm_space=$((($tenant_perm_space/$count_envs)-1000000))
 
 export env_name
 export env_usr

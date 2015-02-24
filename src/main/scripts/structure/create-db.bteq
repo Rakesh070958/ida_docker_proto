@@ -1,7 +1,7 @@
 bteq << EOF
 
 /* 
-* Script for creating the database structure from inside of a tenant
+* Create-database: Script for creating the database structure from inside of a tenant
 * author: Ana-Maria MUSAT
 */
 
@@ -11,8 +11,18 @@ bteq << EOF
 .set errorout stdout;
 
 /*
+ * CREATE the default profile for the database
+ */
+
+CREATE PROFILE $profile_db AS
+    ACCOUNT = ('$M0+$db_name&S&D&H', '$H0+$env_name&S&D&H'),
+    DEFAULT DATABASE = $db_name,
+    PASSWORD=(EXPIRE=90, MAXLOGONATTEMPTS=10, MINCHAR=8, MAXCHAR=16, SPECCHAR='M', DIGITS ='R', REUSE =1);
+
+
+/*
  * CREATE the databases and assign the necessary space to them
- * the size of the databases is matter to some arithmetics
+ * the size of the databases is matter to some arithmetics (!!should be discussed!!)
  */
 
 CREATE DATABASE $db_name FROM $env_name AS

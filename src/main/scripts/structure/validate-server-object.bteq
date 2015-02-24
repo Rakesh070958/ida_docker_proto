@@ -1,0 +1,98 @@
+bteq << EOF
+
+/*
+ * Validate-server-object: script for validating the server object - QueryGrid
+ * author: Ana - Maria MUSAT
+ */
+
+.LOGON $servername/$user_db_name,pass_1234;
+
+.set width 200;
+.set errorout stdout;
+
+/*
+* Create Teradata table
+*/
+CREATE TABLE $db_name.$table_db_qg ,NO FALLBACK ,
+     NO BEFORE JOURNAL,
+     NO AFTER JOURNAL,
+     CHECKSUM = DEFAULT,
+     DEFAULT MERGEBLOCKRATIO
+     (
+      Plant_id INTEGER NOT NULL,
+      sensor_id INTEGER NOT NULL,
+      TS TIMESTAMP(6) NOT NULL,
+      sensor_val FLOAT)
+UNIQUE PRIMARY INDEX ( Plant_id ,sensor_id ,TS )
+PARTITION BY RANGE_N(TS  BETWEEN TIMESTAMP '2013-01-01 00:00:00+00:00' AND TIMESTAMP '2017-12-31 23:59:59+00:00' EACH INTERVAL '1' DAY ,
+ NO RANGE OR UNKNOWN);
+
+
+/*
+* Check if the table was created
+*/ 
+SELECT COUNT(*) FROM $db_name.$table_db_qg;
+
+/*
+* Drop Hive table
+*/
+
+CALL SYSLIB.HDROP('$hive_database_qg', '$table_db_qg','$server_object_db');
+
+/* 
+* Check if the Hive table was dropped
+*/
+select count(*) from $hive_database_qg.$table_db_qg@$server_object_db;
+
+/*
+* Use the server object to create a Hive table
+* Parameters: teradata table name, comma separated list of columns based on which the partitioning should be made, 
+* location for the Hive table (note that the Hadoop user that tdauser impersonates should have access to that location otherwise an error is thrown), 
+* foreign server, Hive database name
+*/
+CALL SYSLIB.HCTAS('$db_name.$table_db_qg', '', 'LOCATION "/tmp"', '$server_object_db', '$hive_database_qg');
+
+/*
+* Check if the Hive table was created
+*/
+
+select count(*) from $hive_database_qg.$table_db_qg@$server_object_db;
+
+/* 
+* Insert fake data into the Teradata table
+*/
+INSERT INTO $db_name.$table_db_qg (Plant_id, sensor_id, TS, sensor_val) 
+VALUES (1,23, '2010-07-06 07:52:35.000000', 4.5);
+select count(*) from $db_name.$table_db_qg;
+/*
+* Insert data into Hive table from Teradata table
+*/
+INSERT INTO $hive_database_qg.$table_db_qg@$server_object_db(Plant_id, sensor_id, TS, sensor_val)
+SELECT * FROM $db_name.$table_db_qg;
+
+SELECT * FROM $hive_database_qg.$table_db_qg@$server_object_db;
+
+
+/*
+* Insert data into Teradata table from hive table
+*/
+select count(*) from $db_name.trends;
+INSERT INTO $db_name.trends (Plant_id, sensor_id, TS, sensor_val)
+SELECT * FROM $hive_database_qg.$table_db_qg@$server_object_db;
+select count(*) from $db_name.trends;
+
+/*
+* Create view as
+*/
+CREATE VIEW $db_name.$view_db_qg AS (SELECT * FROM $hive_database_qg.$table_db_qg@$server_object_db);
+SELECT COUNT(*) FROM $db_name.$view_db_qg;
+SELECT * FROM $db_name.$view_db_qg;
+
+CREATE VIEW $db_name.$view_db_qg_restricted AS (SELECT * FROM $hive_database_qg.$table_db_qg@$server_object_db);
+SELECT COUNT(*) FROM $db_name.$view_db_qg_restricted;
+SELECT * FROM $db_name.$view_db_qg_restricted;
+
+.LOGOFF;
+.QUIT;
+EOF
+

@@ -1,19 +1,56 @@
 #!/bin/bash
 
-servername=@settings.servername@
+echo ---------------- General settings-------------
+servername=SDL
+superuser=Sysdba_PGD
+superuser_password=PGD_tlu_123
+
 export servername
-echo ServerName = $servername
-
-superuser=@settings.superuser@
 export superuser
-echo SuperUser = $superuser
-
-superuser_password=@settings.superuser_password@
 export superuser_password
+
+echo ServerName = $servername
+echo SuperUser = $superuser
 echo SuperUser Password = $superuser_password
 
+
+echo ---------------- HADOOP/HIVE settings-------------
+hosttype=hadoop
+hive_metastore_server=smp200-8
+hive_metastore_port=9083
+hive_port=10000
+hive_username=hive
+hive_dbname=default
+hive_templeton_port=50111
+hadoop_nameservices=SIEMENSCTHADOOP
+hadoop_namenode1=hdp200-8:8020
+hadoop_namenode2=hdp200-9:8020
+
+export hosttype
+export hive_metastore_server
+export hive_metastore_port
+export hive_port
+export hive_username
+export hive_dbname
+export hive_templeton_port
+export hadoop_nameservices
+export hadoop_namenode1
+export hadoop_namenode2
+
+echo hosttype= $hosttype
+echo hive_metastore_server=$hive_metastore_server
+echo hive_metastore_port=$hive_metastore_port
+echo hive_port=$hive_port
+echo hive_username=$hive_username
+echo hive_dbname=$hive_dbname
+echo hive_templeton_port=$hive_templeton_port
+echo hadoop_nameservices=$hadoop_nameservices
+echo hadoop_namenode1=$hadoop_namenode1
+echo hadoop_namenode2=$hadoop_namenode2
+
+
 echo ----------ROLES-------------
-ro_landlord_admin=@roles.landlord_admin@
+ro_landlord_admin=RO_"$landlord"_ADMIN
 export ro_landlord_admin
 echo Role landlord Admin = $ro_landlord_admin
 
@@ -22,7 +59,7 @@ M0=M0
 H0=H0
 export M0
 export H0
-profile_landlord=@profile.landlord@
+profile_landlord=PR_"$landlord"
 export profile_landlord
 echo Profile Tenant = $profile_landlord
 
