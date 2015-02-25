@@ -8,5 +8,6 @@
 # created: 23.01.2015
 ###########################################################################################################
 
-java -Dfile.encoding=UTF-8 -cp "../lib/*;../groovy" groovy.lang.GroovyShell setupTeradata.groovy testArgumentPassed
+#/opt/teradata/jvm64/jdk7/bin/java -Dfile.encoding=UTF-8 -cp "../lib/*:../groovy" groovy.lang.GroovyShell SetupTeradata.groovy
+../scripts/structure/setup.sh
 

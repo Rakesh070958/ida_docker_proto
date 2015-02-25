@@ -58,14 +58,23 @@ select 1 from dbc.roles where RoleName='$ro_db_server_object_insert';
 DROP ROLE $ro_db_server_object_insert;
 
 .LABEL SkipDropRoleServerInsert
+
+.LOGOFF;
+
 /*
 * Drop server object
 */
+
+.LOGON $servername/$user_name_admin,pass_1234;
 select 1 from dbc.ServerV where ServerName='$server_object_db';
 .IF ACTIVITYCOUNT=0 THEN .GOTO SkipDropServerObject
 DROP FOREIGN SERVER TD_SERVER_DB.$server_object_db;
 
 .LABEL SkipDropServerObject
+.LOGOFF;
+
+.LOGON $servername/$superuser,$superuser_password;
+
 select 1 from dbc.users where UserName='$user_db_name';
 .IF ACTIVITYCOUNT=0 THEN .GOTO SkipDropUser
 DROP USER $user_db_name;
@@ -81,11 +90,11 @@ select 1 from dbc.databases where DatabaseName='$db_name';
 DROP DATABASE $db_name;
 
 .LABEL SkipDropDatabase
-select 1 from dbc.users where profilename='$profile_db';
-.IF ACTIVITYCOUNT=0 THEN .GOTO SkipDropProfile
+*select 1 from dbc.users where profilename='$profile_db';
+*.IF ACTIVITYCOUNT=0 THEN .GOTO SkipDropProfile
 DROP PROFILE $profile_db;
 
-.LABEL SkipDropProfile
+*.LABEL SkipDropProfile
 .LOGOFF;
 .QUIT;
 EOF

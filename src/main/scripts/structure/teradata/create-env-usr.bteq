@@ -42,6 +42,8 @@ GRANT $ro_tenant_admin TO $user_name_admin;
 
 MODIFY USER $user_name_admin AS PASSWORD = pass_1234;
 
+/* The admin user for the environment will have create server priviledges */
+GRANT RO_CREATE_SERVER TO $user_name_admin;
 
 /*
 * Create the data scientist user

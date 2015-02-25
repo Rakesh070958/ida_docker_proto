@@ -25,11 +25,11 @@ select 1 from dbc.databases where DatabaseName='$env_name';
 DROP DATABASE $env_name;
 
 .LABEL SkipDropDatabase
-select 1 from dbc.users where profilename='$profile_env';
-.IF ACTIVITYCOUNT=0 THEN .GOTO SkipDropProfile
+*select 1 from dbc.users where profilename='$profile_env';
+*.IF ACTIVITYCOUNT=0 THEN .GOTO SkipDropProfile
 DROP PROFILE $profile_env;
 
-.LABEL SkipDropProfile
+*.LABEL SkipDropProfile
 
 .LOGOFF;
 .QUIT;

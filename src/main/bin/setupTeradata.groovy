@@ -9,7 +9,7 @@ def sout = new StringBuffer()
 def serr = new StringBuffer()
 
 //Create structure
-def p1 = "../scripts/structure/setupStructure.sh".execute()
+def p1 = "../scripts/structure/setup.sh".execute()
 p1.consumeProcessOutput(sout, serr)
 println sout
 println serr

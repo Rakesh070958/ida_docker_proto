@@ -1,6 +1,7 @@
 bteq << EOF
 
-.LOGON $servername/$superuser,$superuser_password;
+*.LOGON $servername/$superuser,$superuser_password;
+.LOGON $servername/$user_name_admin,pass_1234;
 
 /*
 * Create-server-object: script for creating the server object for QueryGrid
@@ -16,17 +17,6 @@ bteq << EOF
 * User must have CREATE SERVER ON TD_SERVER_DB privilege in order to create such an object. 
 * It is recommended to grant these privileges on roles and then assign roles to users and database as needed.
 */
-/*
-* Role that is granted CREATE SERVER on TD_SERVER_DB
-*/
-
-CREATE ROLE $ro_db_server_object;
-GRANT CREATE SERVER ON TD_SERVER_DB TO $ro_db_server_object;
-
-*GRANT $ro_db_server_object TO $user_db_name;
-GRANT $ro_db_server_object TO $user_name_admin;
-
-
 CREATE FOREIGN SERVER TD_SERVER_DB.$server_object_db USING
 	hosttype ('$hosttype') 
 	server('$hive_metastore_server') /* hive metastore */
@@ -41,25 +31,6 @@ DO IMPORT WITH SYSLIB.LOAD_FROM_HCATALOG USING
 DO EXPORT WITH SYSLIB.LOAD_TO_HCATALOG USING
 	merge_hdfs_files('true')
 	hadoop_properties('<dfs.client.use.datanode.hostname=true>,<dfs.datanode.use.datanode.hostname=true>,<dfs.nameservices=$hadoop_nameservices>,<dfs.ha.namenodes.$hadoop_nameservices=nn1,nn2>,<dfs.namenode.rpc-address.$hadoop_nameservices.nn1=$hadoop_namenode1>,<dfs.namenode.rpc-address.$hadoop_nameservices.nn2=$hadoop_namenode2>,<dfs.client.failover.proxy.provider.$hadoop_nameservices=org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider>');
-
-/*
-* Configure server object to be utilized for select and insert.
-* One must have SELECT privilege on that server object for reading data in Hive tables using the server object.
-* One must have INSERT privilege on the server object for writing to a Hive table reached using that server object.
-*/
-
-
-/**************************/
-CREATE ROLE $ro_db_server_object_select;
-CREATE ROLE $ro_db_server_object_insert;
-
-GRANT SELECT ON TD_SERVER_DB.$server_object_db TO $ro_db_server_object_select;
-GRANT INSERT ON TD_SERVER_DB.$server_object_db TO $ro_db_server_object_insert;
-
-GRANT $ro_db_server_object_select TO $user_db_name;
-GRANT $ro_db_server_object_insert TO $user_db_name;
-
-/**************/
 
 /* needed for accessing hive tables via teradata views */
 GRANT SELECT ON TD_SERVER_DB.$server_object_db TO $db_name WITH GRANT OPTION;

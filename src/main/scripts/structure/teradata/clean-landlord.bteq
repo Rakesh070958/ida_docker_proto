@@ -24,12 +24,12 @@ select 1 from dbc.users where UserName='$landlord';
 .IF ACTIVITYCOUNT=0 THEN .GOTO SkipDropUserLandlord
 DROP USER $landlord;
 
-.LABEL SkipDropUserLandlord
-select 1 from dbc.users where profilename='$profile_landlord';
+*.LABEL SkipDropUserLandlord
+*select 1 from dbc.users where profilename='$profile_landlord';
 .IF ACTIVITYCOUNT=0 THEN .GOTO SkipDropProfile
-DROP PROFILE $profile_landlord;
+*DROP PROFILE $profile_landlord;
 
-.LABEL SkipDropProfile
+*.LABEL SkipDropProfile
 
 .LOGOFF;
 .QUIT;

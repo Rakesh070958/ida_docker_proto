@@ -5,7 +5,7 @@ bteq << EOF
  * author: Ana - Maria MUSAT
  */
 
-.LOGON $servername/$user_db_name,pass_1234;
+.LOGON $servername/$user_name_admin,pass_1234;
 
 .set width 200;
 .set errorout stdout;
@@ -81,6 +81,17 @@ INSERT INTO $db_name.trends (Plant_id, sensor_id, TS, sensor_val)
 SELECT * FROM $hive_database_qg.$table_db_qg@$server_object_db;
 select count(*) from $db_name.trends;
 
+/* create a new hive table*/
+CALL SYSLIB.HDROP('$hive_database_qg', 'trends','$server_object_db');
+CALL SYSLIB.HCTAS('$db_name.trends', '', 'LOCATION "/tmp"', '$server_object_db', '$hive_database_qg');
+
+/*
+* Select from foreign table
+*/
+SELECT * FROM $hive_database_qg.$table_db_qg@$server_object_db;
+SELECT * FROM FOREIGN TABLE (SELECT * FROM $hive_database_qg.$table_db_qg)@$server_object_db as dt;
+
+
 /*
 * Create view as
 */
@@ -88,7 +99,7 @@ CREATE VIEW $db_name.$view_db_qg AS (SELECT * FROM $hive_database_qg.$table_db_q
 SELECT COUNT(*) FROM $db_name.$view_db_qg;
 SELECT * FROM $db_name.$view_db_qg;
 
-CREATE VIEW $db_name.$view_db_qg_restricted AS (SELECT * FROM $hive_database_qg.$table_db_qg@$server_object_db);
+CREATE VIEW $db_name.$view_db_qg_restricted AS (SELECT * FROM $hive_database_qg.trends@$server_object_db);
 SELECT COUNT(*) FROM $db_name.$view_db_qg_restricted;
 SELECT * FROM $db_name.$view_db_qg_restricted;
 
