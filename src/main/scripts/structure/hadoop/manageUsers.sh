@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source ./settings.sh
+#source ./settings.sh
 source ./utilities.sh
 
 ### createSysAdmin - creates the IDA System Administrator account
@@ -10,7 +10,7 @@ function createSysAdmin {
 	sysadmin="${LANDLORD}_${LANDLORD_SUPERUSER}"
 	tenant_groups=""
 	for tenant in $TENANTS; do
-		tenant_groups="$tenant_groups,${tenant}_${GROUP}"
+		tenant_groups="$tenant_groups,${LANDLORD}_${tenant}_${GROUP}"
 	done
 
 	allgroups="$tenantGroupName,$LINUX_GROUPS"
@@ -22,8 +22,8 @@ function createSysAdmin {
 ### 	- no parameters
 function createGroups {
 	for tenant in $TENANTS; do
-		tenantGroupName="${tenant}_${GROUP}"
-		echo "Creating the group [ $(COL $tenantGroupName 32) ] for tenant $(COL $tenant 97) ..."
+		tenantGroupName="${LANDLORD}_${tenant}_${GROUP}"
+		echo "Creating the group [ $(COL $tenantGroupName 32) ] for tenant $(COL ${LANDLORD}_$tenant 97) ..."
 		groupadd $tenantGroupName	
 	done
 }
@@ -37,8 +37,8 @@ function createUsers {
 	for tenant in $TENANTS; do
 		echo "Creating the users for tenant $(COL $tenant 97) ..."
 		for userName in $USERS; do
-			tenantGroupName="${tenant}_${GROUP}"
-			tenantUserName="${tenant}_${userName}_usr"
+			tenantGroupName="${LANDLORD}_${tenant}_${GROUP}"
+			tenantUserName="${LANDLORD}_${tenant}_${userName}_usr"
 				
 			echo -e "\t- user $(COL $tenantUserName 32) (group $tenantGroupName) ..."
 			useradd -g $tenantGroupName -G "$tenantGroupName,$LINUX_GROUPS" $tenantUserName
@@ -69,8 +69,8 @@ function deleteUsers {
 	for tenant in $TENANTS; do
 		echo "Deleting the users for tenant $(COL $tenant 97) ..."
 		for userName in $USERS; do
-			tenantGroupName="${tenant}_${GROUP}"
-			tenantUserName="${tenant}_${userName}_usr"
+			tenantGroupName="${LANDLORD}_${tenant}_${GROUP}"
+			tenantUserName="${LANDLORD}_${tenant}_${userName}_usr"
 			
 			echo -e "\t- user $(COL $tenantUserName 32) (group $tenantGroupName) ..."
 			userdel -r -f $tenantUserName
@@ -83,7 +83,7 @@ function deleteUsers {
 function deleteGroups {
 	for tenant in $TENANTS; do
 		echo "Deleting the groups for tenant $(COL $tenant 97) ..."
-		tenantGroupName="${tenant}_${GROUP}"
+		tenantGroupName="${LANDLORD}_${tenant}_${GROUP}"
 		echo -e "\t- group: $(COL $tenantGroupName 32)"
 		groupdel $tenantGroupName	
 	done

@@ -2,7 +2,7 @@
 LANDLORD="@setup.landlord@"
 # List of business units within LANDLORD (must be two)
 #TENANTS="ps_usr ps_gtop ps_sams ps_usi"
-TENANTS="ps_usi ps_gtop"
+TENANTS="@setup.tenants@"
 #TENANTS="ps_usr ps_gtop ps_sams"
 # List of environments to set up 
 # DEV TST PRD PRP (for PreProd) (PRD should be used only by itself)
@@ -20,7 +20,8 @@ ENVS="@setup.environments@"
 #
 # /<tenant>/<env>/discoveryStore
 #
-DATALAKE="hdfs:///ida/$LANDLORD/<tenant>/<env>/datalake"
+DATALAKE_ROOT="/ida_demo_struct"
+DATALAKE="hdfs://$DATALAKE_ROOT/$(echo $LANDLORD | tr '[:upper:]' '[:lower:]')/<tenant>/<env>/datalake"
 RAWSTORE="$DATALAKE/rawDataStore"
 AGGSTORE="$DATALAKE/aggregatedDataStore"
 ###
@@ -35,7 +36,7 @@ OP_METADATA="$AGGSTORE/opMetadata"
 IDA_METADATA="$AGGSTORE/idaMetadata"
 ###
 # Discovery store
-DISCOVERY_STORE="hdfs:///ida/$LANDLORD/<tenant>/<env>/discoveryStore"
+DISCOVERY_STORE="hdfs://$DATALAKE_ROOT/$(echo $LANDLORD | tr '[:upper:]' '[:lower:]')/<tenant>/<env>/discoveryStore"
 ##############################################################################
 
 

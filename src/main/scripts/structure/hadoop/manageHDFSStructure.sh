@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source ./settings.sh
+#source ./settings.sh
 source ./hadoop/manageUsers.sh
 
 # createHDFSStructure 
@@ -9,6 +9,10 @@ source ./hadoop/manageUsers.sh
 #	- creates the environment subfolders (operational data, metadata, ...)
 #	- applies the security configuration
 function createHDFSStructure {
+	export LANDLORD="$(echo $LANDLORD | tr '[:upper:]' '[:lower:]')"
+	export TENANTS="$(echo $TENANTS | tr '[:upper:]' '[:lower:]')"
+	export ENVS="$(echo $ENVS | tr '[:upper:]' '[:lower:]')"
+
 	showHDFSMessage
 
 	# create tenant and env, create the datalake sub-folders 
@@ -16,17 +20,17 @@ function createHDFSStructure {
 		# create the environments for each tenant
 		for env in $ENVS; do
 			# Replace <tenant> and <env> keywords with corresponding values
-			DATALAKE_="${DATALAKE//<tenant>/$tenant}"
+			DATALAKE_="${DATALAKE//<tenant>/${LANDLORD}_${tenant}}"
 			DATALAKE_="${DATALAKE_//<env>/$env}"
-			RAWSTORE_="${RAWSTORE//<tenant>/$tenant}"
+			RAWSTORE_="${RAWSTORE//<tenant>/${LANDLORD}_${tenant}}"
 			RAWSTORE_="${RAWSTORE_//<env>/$env}"
-			OPDATA_="${OPDATA//<tenant>/$tenant}"
+			OPDATA_="${OPDATA//<tenant>/${LANDLORD}_$tenant}"
 			OPDATA_="${OPDATA_//<env>/$env}"
-			OP_METADATA_="${OP_METADATA//<tenant>/$tenant}"
+			OP_METADATA_="${OP_METADATA//<tenant>/${LANDLORD}_$tenant}"
 			OP_METADATA_="${OP_METADATA_//<env>/$env}"
-			IDA_METADATA_="${IDA_METADATA//<tenant>/$tenant}"
+			IDA_METADATA_="${IDA_METADATA//<tenant>/${LANDLORD}_$tenant}"
 			IDA_METADATA_="${IDA_METADATA_//<env>/$env}"
-			DISCOVERY_STORE_="${DISCOVERY_STORE//<tenant>/$tenant}"
+			DISCOVERY_STORE_="${DISCOVERY_STORE//<tenant>/${LANDLORD}_$tenant}"
 			DISCOVERY_STORE_="${DISCOVERY_STORE_//<env>/$env}"
 
 			echo -e "\nCreating structure for tenant [ $(COL $tenant 32) ] in environment [ $(COL $env 35) ]"
@@ -53,17 +57,17 @@ function createHDFSStructure {
 
 			echo -e "\nApplying security configuration ..."
 
-			echo -e "\t- remove world access to hdfs:///ida/"
-			su hdfs -c "hadoop fs -chmod -R 750 hdfs:///ida/"
-			su hdfs -c "hadoop fs -setfacl -R -m default:other::--- hdfs:///ida/"
+			echo -e "\t- remove world access to hdfs://$DATALAKE_ROOT/"
+			su hdfs -c "hadoop fs -chmod -R 750 hdfs://$DATALAKE_ROOT/"
+			su hdfs -c "hadoop fs -setfacl -R -m default:other::--- hdfs://$DATALAKE_ROOT/"
 
-			echo -e "\t- give tenant $tenant users read access to structure hdfs:///ida/$LANDLORD/$tenant"
+			echo -e "\t- give tenant $tenant users read access to structure hdfs://$DATALAKE_ROOT/$LANDLORD/$tenant"
 			for userName in $USERS; do
-				user="${tenant}_${userName}_usr"
+				user="${LANDLORD}_${tenant}_${userName}_usr"
 
 				# First each IDA user must travers the base structure
-				su hdfs -c "hadoop fs -setfacl -m user:$user:r-x hdfs:///ida/"
-				su hdfs -c "hadoop fs -setfacl -m user:$user:r-x hdfs:///ida/$LANDLORD"
+				su hdfs -c "hadoop fs -setfacl -m user:$user:r-x hdfs://$DATALAKE_ROOT/"
+				su hdfs -c "hadoop fs -setfacl -m user:$user:r-x hdfs://$DATALAKE_ROOT/$LANDLORD"
 
 				if [ $userName == "etl" ]; then 
 					# skip all users who will receive full access explicitly
@@ -71,25 +75,25 @@ function createHDFSStructure {
 				fi
 
 				# Then give Read access into each tenant's structure
-				su hdfs -c "hadoop fs -setfacl -R -m user:$user:r-x hdfs:///ida/$LANDLORD/$tenant"
+				su hdfs -c "hadoop fs -setfacl -R -m user:$user:r-x hdfs://$DATALAKE_ROOT/$LANDLORD/${LANDLORD}_$tenant"
 				# Then make sure all new folders / files will keep this access
-				su hdfs -c "hadoop fs -setfacl -R -m default:user:$user:r-x hdfs:///ida/$LANDLORD/$tenant"
+				su hdfs -c "hadoop fs -setfacl -R -m default:user:$user:r-x hdfs://$DATALAKE_ROOT/$LANDLORD/${LANDLORD}_$tenant"
 			done	
 
-			user="${tenant}_etl_usr"
-			echo -e "\t- give user [ $(COL $user 32) ] full access unde hdfs:///ida/$LANDLORD/$tenant/" 
+			user="${LANDLORD}_${tenant}_etl_usr"
+			echo -e "\t- give user [ $(COL $user 32) ] full access unde hdfs://$DATALAKE_ROOT/$LANDLORD/${LANDLORD}_$tenant/" 
 			# Then full access under the structure
-			su hdfs -c "hadoop fs -setfacl -R -m user:$user:rwx hdfs:///ida/$LANDLORD"
-			su hdfs -c "hadoop fs -setfacl -R -m user:$user:rwx hdfs:///ida/$LANDLORD/$tenant/"
-			su hdfs -c "hadoop fs -setfacl -R -m default:user:$user:rwx hdfs:///ida/$LANDLORD/$tenant/"
+			su hdfs -c "hadoop fs -setfacl -R -m user:$user:rwx hdfs://$DATALAKE_ROOT/$LANDLORD"
+			su hdfs -c "hadoop fs -setfacl -R -m user:$user:rwx hdfs://$DATALAKE_ROOT/$LANDLORD/${LANDLORD}_$tenant/"
+			su hdfs -c "hadoop fs -setfacl -R -m default:user:$user:rwx hdfs://$DATALAKE_ROOT/$LANDLORD/${LANDLORD}_$tenant/"
 		
 			# question: which users should have full access to discovery store
-			user="${tenant}_data_scientist_usr"	
+			user="${LANDLORD}_${tenant}_data_scientist_usr"	
 			echo -e "\t- give user [ $(COL $user  32) ] full acess to discovery store $DISCOVERY_STORE_" 
 			su hdfs -c "hadoop fs -setfacl -R -m user:$user:rwx $DISCOVERY_STORE_"
 			su hdfs -c "hadoop fs -setfacl -R -m default:user:$user:rwx $DISCOVERY_STORE_"
 		
-			user="${tenant}_etl_usr"	
+			user="${LANDLORD}_${tenant}_etl_usr"	
 			echo -e "\t- give user [ $(COL $user  32) ] full acess to discovery store $DISCOVERY_STORE_" 
 			su hdfs -c "hadoop fs -setfacl -R -m user:$user:rwx $DISCOVERY_STORE_"
 			su hdfs -c "hadoop fs -setfacl -R -m default:user:$user:rwx $DISCOVERY_STORE_"
@@ -100,5 +104,5 @@ function createHDFSStructure {
 }
 
 function deleteHDFSStructure {
-	su hdfs -c "hadoop fs -rm -R hdfs:///ida/$LANDLORD"
+	su hdfs -c "hadoop fs -rm -R hdfs://$DATALAKE_ROOT/$LANDLORD"
 }

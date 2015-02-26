@@ -53,16 +53,3 @@ function showCapacityMessage {
 	showMessage "$msg"
 }
 
-function showStartTeradataMessage {
-	msg="Creating the Teradata structure?"
-	showMessage "$msg"
-}
-
-function showCleanTeradataStructureMessage {
-	msg="Do you want to clean the Teradata structure?"
-	showMessage "$msg"
-}
-function showCreateTeradataStructureMessage {
-	msg="Do you want to create the Teradata structure?"
-	showMessage "$msg"
-}
