@@ -73,8 +73,6 @@ CALL SYSLIB.HCTAS('$db_name.$table_db_qg', '', 'LOCATION "/tmp"', '$server_objec
 /*Select from Hive table -> Should fail*/
 SELECT * FROM $hive_database_qg.$table_db_qg@$server_object_db;
 
-SELECT * FROM FOREIGN TABLE (SELECT * FROM $hive_database_qg.$table_db_qg)@$server_object_db as dt; 
-
 .LOGOFF;
 
 .LOGON $servername/$user_db_name,pass_1234;

@@ -1,6 +1,5 @@
 bteq << EOF
 
-*.LOGON $servername/$superuser,$superuser_password;
 .LOGON $servername/$user_name_admin,pass_1234;
 
 /*
