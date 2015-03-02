@@ -59,7 +59,7 @@ SELECT COUNT(*) from $(echo "${landlord}_${tenant}_${environment}_d_mtd" | tr '[
 */
 SELECT COUNT(*) from $db_name.audit;
 INSERT INTO $db_name.audit (FILEPATH, FILEEXTENSION, TIMESTP, USERNAME, OPERATION, DIVISION, DEVICEID, DATATYPE)
-SELECT COUNT(*) FROM $(echo "${landlord}_${tenant}_${environment}_d_mtd" | tr '[:upper:]' '[:lower:]').audit@$server_object_db;
+SELECT * FROM $(echo "${landlord}_${tenant}_${environment}_d_mtd" | tr '[:upper:]' '[:lower:]').audit@$server_object_db;
 
 SELECT COUNT(*) from $db_name.audit;
 
