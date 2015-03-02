@@ -67,8 +67,8 @@ DO EXPORT WITH SYSLIB.LOAD_TO_HCATALOG USING
         hadoop_properties('<dfs.client.use.datanode.hostname=true>,<dfs.datanode.use.datanode.hostname=true>,<dfs.nameservices=$hadoop_nameservices>,<dfs.ha.namenodes.$hadoop_nameservices=nn1,nn2>,<dfs.namenode.rpc-address.$hadoop_nameservices.nn1=$hadoop_namenode1>,<dfs.namenode.rpc-address.$hadoop_nameservices.nn2=$hadoop_namenode2>,<dfs.client.failover.proxy.provider.$hadoop_nameservices=org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider>');
 
 /*Select from Hive table -> Should fail*/
-select count(*) from $(echo "${landlord}_${tenant}_${environment}_d_mtd" | tr '[:upper:]' '[:lower:]').audit@$server_object_db;
-select count(*) from $(echo "${landlord}_${tenant}_${environment}_d_mtd" | tr '[:upper:]' '[:lower:]').$table_db_qg@$server_object_db;
+SELECT count(*) from $(echo "${landlord}_${tenant}_${environment}_d_mtd" | tr '[:upper:]' '[:lower:]').audit@$server_object_db;
+SELECT count(*) from $(echo "${landlord}_${tenant}_${environment}_d_mtd" | tr '[:upper:]' '[:lower:]').$table_db_qg@$server_object_db;
 
 .LOGOFF;
 
@@ -100,10 +100,10 @@ DO EXPORT WITH SYSLIB.LOAD_TO_HCATALOG USING
 
 /*Select from Hive table -> Should fail*/
 
-select count(*) from $(echo "${landlord}_${tenant}_${environment}_d_mtd" | tr '[:upper:]' '[:lower:]').audit@$server_object_db;
-select count(*) from $(echo "${landlord}_${tenant}_${environment}_d_mtd" | tr '[:upper:]' '[:lower:]').table_db_qg@$server_object_db;
+SELECT count(*) from $(echo "${landlord}_${tenant}_${environment}_d_mtd" | tr '[:upper:]' '[:lower:]').audit@$server_object_db;
+SELECT count(*) from $(echo "${landlord}_${tenant}_${environment}_d_mtd" | tr '[:upper:]' '[:lower:]').table_db_qg@$server_object_db;
 
-SELECT * FROM FOREIGN TABLE (select * from $(echo "${landlord}_${tenant}_${environment}_d_mtd" | tr '[:upper:]' '[:lower:]').audit)@$server_object_db as dt;
+SELECT count(*) FROM FOREIGN TABLE (SELECT * from $(echo "${landlord}_${tenant}_${environment}_d_mtd" | tr '[:upper:]' '[:lower:]').audit)@$server_object_db as dt;
 
 .LOGOFF;
 

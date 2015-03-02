@@ -37,47 +37,40 @@ SELECT COUNT(*) FROM $db_name.$table_db_qg;
 * Check if the Hive table can be accessed
 */
 
-select count(*) from $(echo "${landlord}_${tenant}_${environment}_d_mtd" | tr '[:upper:]' '[:lower:]').audit@$server_object_db;
+SELECT COUNT(*) from $(echo "${landlord}_${tenant}_${environment}_d_mtd" | tr '[:upper:]' '[:lower:]').audit@$server_object_db;
 
 /* 
 * Insert fake data into the Teradata table
 */
 INSERT INTO $db_name.$table_db_qg (FILEPATH, FILEEXTENSION, TIMESTP, USERNAME, OPERATION, DIVISION, DEVICEID, DATATYPE)
 VALUES ('dummy_filepath','dummy_fileext', '2010-07-06 07:52:35.000000', 'dummy_usr', 'dummy_op', 'dummy_division', 'dummy_deviceid', 'INT');
-select count(*) from $db_name.$table_db_qg;
+
+SELECT count(*) from $db_name.$table_db_qg;
 /*
 * Insert data into Hive table from Teradata table
 */
 INSERT INTO $(echo "${landlord}_${tenant}_${environment}_d_mtd" | tr '[:upper:]' '[:lower:]').audit@$server_object_db(FILEPATH, FILEEXTENSION, TIMESTP, USERNAME, OPERATION, DIVISION, DEVICEID, DATATYPE)
 SELECT * FROM $db_name.$table_db_qg;
 
-*SELECT FILEPATH, FILEEXTENSION, TIMESTP, USERNAME, OPERATION, DIVISION, DEVICEID, DATATYPE FROM $(echo "${landlord}_${tenant}_${environment}_d_mtd" | tr '[:upper:]' '[:lower:]').audit@$server_object_db;
-SELECT TIMESTP, USERNAME, OPERATION, DIVISION, DEVICEID, DATATYPE FROM $(echo "${landlord}_${tenant}_${environment}_d_mtd" | tr '[:upper:]' '[:lower:]').audit@$server_object_db;
-
-select count(*) from $(echo "${landlord}_${tenant}_${environment}_d_mtd" | tr '[:upper:]' '[:lower:]').audit@$server_object_db;
+SELECT COUNT(*) from $(echo "${landlord}_${tenant}_${environment}_d_mtd" | tr '[:upper:]' '[:lower:]').audit@$server_object_db;
 
 /*
 * Insert data into Teradata table from hive table
 */
-select count(*) from $db_name.audit;
+SELECT COUNT(*) from $db_name.audit;
 INSERT INTO $db_name.audit (FILEPATH, FILEEXTENSION, TIMESTP, USERNAME, OPERATION, DIVISION, DEVICEID, DATATYPE)
-SELECT FILEPATH, FILEEXTENSION, TIMESTP, USERNAME, OPERATION, DIVISION, DEVICEID, DATATYPE FROM $(echo "${landlord}_${tenant}_${environment}_d_mtd" | tr '[:upper:]' '[:lower:]').audit@$server_object_db;
+SELECT COUNT(*) FROM $(echo "${landlord}_${tenant}_${environment}_d_mtd" | tr '[:upper:]' '[:lower:]').audit@$server_object_db;
 
-SELECT TIMESTP, USERNAME, OPERATION, DIVISION, DEVICEID, DATATYPE FROM $(echo "${landlord}_${tenant}_${environment}_d_mtd" | tr '[:upper:]' '[:lower:]').audit@$server_object_db;
-
-select count(*) from $db_name.audit;
+SELECT COUNT(*) from $db_name.audit;
 
 /*
 * Create view as
 */
 CREATE VIEW $db_name.$view_db_qg AS (SELECT * FROM $(echo "${landlord}_${tenant}_${environment}_d_mtd" | tr '[:upper:]' '[:lower:]').audit@$server_object_db);
 SELECT COUNT(*) FROM $db_name.$view_db_qg;
-*SELECT FILEPATH, FILEEXTENSION, TIMESTP, USERNAME, OPERATION, DIVISION, DEVICEID, DATATYPE FROM $db_name.$view_db_qg;
-SELECT TIMESTP, USERNAME, OPERATION, DIVISION, DEVICEID, DATATYPE FROM $db_name.$view_db_qg;
 
 CREATE VIEW $db_name.$view_db_qg_restricted AS (SELECT * FROM $(echo "${landlord}_${tenant}_${environment}_d_mtd" | tr '[:upper:]' '[:lower:]').audit@$server_object_db);
 SELECT COUNT(*) FROM $db_name.$view_db_qg_restricted;
-SELECT * FROM $db_name.$view_db_qg_restricted;
 
 .LOGOFF;
 .QUIT;
