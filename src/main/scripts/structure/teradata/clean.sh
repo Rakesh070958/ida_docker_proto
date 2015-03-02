@@ -23,15 +23,8 @@ function cleanTDStructures {
 			for database in $databases; do
 				db=$landlord_$tenant_$environment_$database
 				export db
-                echo "$(COL "Teradata: Cleaning the database ----------------------------------" 32)"
+				echo "$(COL "Teradata: Cleaning the database ----------------------------------" 32)"
 				source ./teradata/settings-db.sh >> td.log
-				echo "$(COL "Teradata: Cleaning the hive table and hive database ---------------" 32)"
-				echo "$(COL "Hive table: $hive_database_qg.$table_db_qg" 34)"
-				echo "$(COL "Hive table: $hive_database_qg.trends" 34)"
-				echo "$(COL "Hive database: $hive_database_qg" 34)"
-				hive -S -e "\"DROP TABLE $hive_database_qg.$table_db_qg;\"" >> td.log
-				hive -S -e "\"DROP TABLE $hive_database_qg.trends;\"" >> td.log
-				hive -S -e "\"DROP DATABASE IF EXISTS $hive_database_qg CASCADE;\"" >> td.log
 				echo "$(COL "Database: ${landlord}_${tenant}_${environment}_${database}" 34)"
 				sh ./teradata/clean-db.bteq >> td.log
 			done

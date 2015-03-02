@@ -16,6 +16,8 @@ hive_database_qg=@settings.tenant.environment.database.hive_database_qg@
 view_db_qg=@settings.tenant.environment.database.view_db_qg@
 view_db_qg_restricted=@settings.tenant.environment.database.view_db_qg_restricted@
 db_perm_space=@settings.tenant.environment.database.db_perm_space@
+#hive_username="$(echo ${landlord}_${tenant} | tr '[:upper:]' '[:lower:]')_etl_usr"
+hive_username=@settings.tenant.environment.database.hive_username@
 
 export db_name
 export ro_db_name
@@ -30,8 +32,8 @@ export server_object_db
 export table_db_qg
 export view_db_qg
 export view_db_qg_restricted
-export hive_database_qg
 export db_perm_space
+export hive_username
 
 echo Database Name= $db_name
 echo Role Database= $ro_db_name
@@ -43,6 +45,5 @@ echo Profile database= $profile_db
 echo Server object Database= $server_object_db
 echo Table QueryGrid Database=$table_db_qg
 echo View QueryGrid=$view_db_qg
-echo Hive Database QueryGrid=$hive_database_qg
 echo Database Perm Space= $db_perm_space
-
+echo Hive user name=$hive_username

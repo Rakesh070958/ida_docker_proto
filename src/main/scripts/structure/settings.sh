@@ -80,7 +80,6 @@ hosttype=@settings.hosttype@
 hive_metastore_server=@settings.hive_metastore_server@
 hive_metastore_port=@settings.hive_metastore_port@
 hive_port=@settings.hive_port@
-hive_username=@settings.hive_username@
 hive_templeton_port=@settings.hive_templeton_port@
 hadoop_nameservices=@settings.hadoop_nameservices@
 hadoop_namenode1=@settings.hadoop_namenode1@
@@ -107,7 +106,6 @@ export hosttype
 export hive_metastore_server
 export hive_metastore_port
 export hive_port
-export hive_username
 export hive_templeton_port
 export hadoop_nameservices
 export hadoop_namenode1

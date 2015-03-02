@@ -2,7 +2,7 @@
 bteq << EOF
 
 /*
- * Create-database-tables: script for crating teradata tables from a tenant
+ * Create-database-tables: script for crating teradata tables from a database from a tenant
  * author: Ana - Maria MUSAT
  */
 
@@ -11,18 +11,21 @@ bteq << EOF
 .set width 200;
 .set errorout stdout;
 
-CREATE MULTISET TABLE $db_name.trends, NO FALLBACK,
+CREATE MULTISET TABLE $db_name.audit, NO FALLBACK,
 NO BEFORE JOURNAL,
 NO AFTER JOURNAL,
 CHECKSUM = DEFAULT,
 DEFAULT MERGEBLOCKRATIO
 (
-Plant_id BIGINT NOT NULL,
-Sensor_id BIGINT NOT NULL,
-TS TIMESTAMP(6) NOT NULL,
-Sensor_val FLOAT)
-UNIQUE PRIMARY INDEX (Plant_Id, Sensor_id, TS)
-PARTITION BY RANGE_N(TS BETWEEN TIMESTAMP '2013-01-01 00:00:00+00:00' AND TIMESTAMP '2017-12-31 23:59:59+00:00' EACH INTERVAL '1' DAY, NO RANGE OR UNKNOWN);
+	FILEPATH VARCHAR(20) NOT NULL,
+	FILEEXTENSION VARCHAR(20) NOT NULL,
+	TIMESTP TIMESTAMP(6) NOT NULL,
+	USERNAME VARCHAR(20) NOT NULL,
+	OPERATION VARCHAR(20) NOT NULL,
+	DIVISION VARCHAR(20) NOT NULL,
+	DEVICEID VARCHAR(20) NOT NULL,
+	DATATYPE VARCHAR(20) NOT NULL
+);
 
 .LOGOFF;
 .QUIT;

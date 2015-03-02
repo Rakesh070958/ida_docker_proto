@@ -17,7 +17,7 @@ rm -f td.log
 
 while true; do
 	echo "Do you want to create the Hadoop structure now (yes/no) ?"
-	read -r
+	read -n 3
 	if [ "$REPLY" == "yes" ]; then
 		echo "$(COL "Running UNINSTALL procedure --------------------------------------" 90)"
 		deleteHiveTables
@@ -52,14 +52,15 @@ done
 
 
 while true; do
-	echo "Do you want to create the Teradata structure now (yes/no) ?"
-	read -r
+	echo -e "\n\nDo you want to create the Teradata structure now (yes/no) ?"
+	read -n 3
 	if [ "$REPLY" == "yes" ]; then
 		source ./teradata/clean.sh
 		source ./teradata/create-structure.sh
 
 		cleanTDStructures
 		createTeradataStructure
+		break
 	elif [ "$REPLY" == "no" ]; then
 		break
 	fi

@@ -7,7 +7,7 @@ bteq << EOF
 
 .LOGON $servername/$user_name_admin,pass_1234;
 
-.set width 200;
+.set width 300;
 .set errorout stdout;
 
 /*
@@ -19,14 +19,14 @@ CREATE TABLE $db_name.$table_db_qg ,NO FALLBACK ,
      CHECKSUM = DEFAULT,
      DEFAULT MERGEBLOCKRATIO
      (
-      Plant_id INTEGER NOT NULL,
-      sensor_id INTEGER NOT NULL,
-      TS TIMESTAMP(6) NOT NULL,
-      sensor_val FLOAT)
-UNIQUE PRIMARY INDEX ( Plant_id ,sensor_id ,TS )
-PARTITION BY RANGE_N(TS  BETWEEN TIMESTAMP '2013-01-01 00:00:00+00:00' AND TIMESTAMP '2017-12-31 23:59:59+00:00' EACH INTERVAL '1' DAY ,
- NO RANGE OR UNKNOWN);
-
+	FILEPATH VARCHAR(20) NOT NULL,
+	FILEEXTENSION VARCHAR(20) NOT NULL,
+	TIMESTP TIMESTAMP(6) NOT NULL,
+	USERNAME VARCHAR(20) NOT NULL,
+	OPERATION VARCHAR(20) NOT NULL,
+	DIVISION VARCHAR(20) NOT NULL,
+	DEVICEID VARCHAR(20) NOT NULL,
+	DATATYPE VARCHAR(20) NOT NULL);
 
 /*
 * Check if the table was created
@@ -34,72 +34,48 @@ PARTITION BY RANGE_N(TS  BETWEEN TIMESTAMP '2013-01-01 00:00:00+00:00' AND TIMES
 SELECT COUNT(*) FROM $db_name.$table_db_qg;
 
 /*
-* Drop Hive table
+* Check if the Hive table can be accessed
 */
 
-CALL SYSLIB.HDROP('$hive_database_qg', '$table_db_qg','$server_object_db');
-
-/* 
-* Check if the Hive table was dropped
-*/
-select count(*) from $hive_database_qg.$table_db_qg@$server_object_db;
-
-/*
-* Use the server object to create a Hive table
-* Parameters: teradata table name, comma separated list of columns based on which the partitioning should be made, 
-* location for the Hive table (note that the Hadoop user that tdauser impersonates should have access to that location otherwise an error is thrown), 
-* foreign server, Hive database name
-*/
-CALL SYSLIB.HCTAS('$db_name.$table_db_qg', '', 'LOCATION "/tmp"', '$server_object_db', '$hive_database_qg');
-
-/*
-* Check if the Hive table was created
-*/
-
-select count(*) from $hive_database_qg.$table_db_qg@$server_object_db;
+select count(*) from $(echo "${landlord}_${tenant}_${environment}_d_mtd" | tr '[:upper:]' '[:lower:]').audit@$server_object_db;
 
 /* 
 * Insert fake data into the Teradata table
 */
-INSERT INTO $db_name.$table_db_qg (Plant_id, sensor_id, TS, sensor_val) 
-VALUES (1,23, '2010-07-06 07:52:35.000000', 4.5);
+INSERT INTO $db_name.$table_db_qg (FILEPATH, FILEEXTENSION, TIMESTP, USERNAME, OPERATION, DIVISION, DEVICEID, DATATYPE)
+VALUES ('dummy_filepath','dummy_fileext', '2010-07-06 07:52:35.000000', 'dummy_usr', 'dummy_op', 'dummy_division', 'dummy_deviceid', 'INT');
 select count(*) from $db_name.$table_db_qg;
 /*
 * Insert data into Hive table from Teradata table
 */
-INSERT INTO $hive_database_qg.$table_db_qg@$server_object_db(Plant_id, sensor_id, TS, sensor_val)
+INSERT INTO $(echo "${landlord}_${tenant}_${environment}_d_mtd" | tr '[:upper:]' '[:lower:]').audit@$server_object_db(FILEPATH, FILEEXTENSION, TIMESTP, USERNAME, OPERATION, DIVISION, DEVICEID, DATATYPE)
 SELECT * FROM $db_name.$table_db_qg;
 
-SELECT * FROM $hive_database_qg.$table_db_qg@$server_object_db;
+*SELECT FILEPATH, FILEEXTENSION, TIMESTP, USERNAME, OPERATION, DIVISION, DEVICEID, DATATYPE FROM $(echo "${landlord}_${tenant}_${environment}_d_mtd" | tr '[:upper:]' '[:lower:]').audit@$server_object_db;
+SELECT TIMESTP, USERNAME, OPERATION, DIVISION, DEVICEID, DATATYPE FROM $(echo "${landlord}_${tenant}_${environment}_d_mtd" | tr '[:upper:]' '[:lower:]').audit@$server_object_db;
 
+select count(*) from $(echo "${landlord}_${tenant}_${environment}_d_mtd" | tr '[:upper:]' '[:lower:]').audit@$server_object_db;
 
 /*
 * Insert data into Teradata table from hive table
 */
-select count(*) from $db_name.trends;
-INSERT INTO $db_name.trends (Plant_id, sensor_id, TS, sensor_val)
-SELECT * FROM $hive_database_qg.$table_db_qg@$server_object_db;
-select count(*) from $db_name.trends;
+select count(*) from $db_name.audit;
+INSERT INTO $db_name.audit (FILEPATH, FILEEXTENSION, TIMESTP, USERNAME, OPERATION, DIVISION, DEVICEID, DATATYPE)
+SELECT FILEPATH, FILEEXTENSION, TIMESTP, USERNAME, OPERATION, DIVISION, DEVICEID, DATATYPE FROM $(echo "${landlord}_${tenant}_${environment}_d_mtd" | tr '[:upper:]' '[:lower:]').audit@$server_object_db;
 
-/* create a new hive table*/
-CALL SYSLIB.HDROP('$hive_database_qg', 'trends','$server_object_db');
-CALL SYSLIB.HCTAS('$db_name.trends', '', 'LOCATION "/tmp"', '$server_object_db', '$hive_database_qg');
+SELECT TIMESTP, USERNAME, OPERATION, DIVISION, DEVICEID, DATATYPE FROM $(echo "${landlord}_${tenant}_${environment}_d_mtd" | tr '[:upper:]' '[:lower:]').audit@$server_object_db;
 
-/*
-* Select from foreign table
-*/
-SELECT * FROM $hive_database_qg.$table_db_qg@$server_object_db;
-SELECT * FROM FOREIGN TABLE (SELECT * FROM $hive_database_qg.$table_db_qg)@$server_object_db as dt;
-
+select count(*) from $db_name.audit;
 
 /*
 * Create view as
 */
-CREATE VIEW $db_name.$view_db_qg AS (SELECT * FROM $hive_database_qg.$table_db_qg@$server_object_db);
+CREATE VIEW $db_name.$view_db_qg AS (SELECT * FROM $(echo "${landlord}_${tenant}_${environment}_d_mtd" | tr '[:upper:]' '[:lower:]').audit@$server_object_db);
 SELECT COUNT(*) FROM $db_name.$view_db_qg;
-SELECT * FROM $db_name.$view_db_qg;
+*SELECT FILEPATH, FILEEXTENSION, TIMESTP, USERNAME, OPERATION, DIVISION, DEVICEID, DATATYPE FROM $db_name.$view_db_qg;
+SELECT TIMESTP, USERNAME, OPERATION, DIVISION, DEVICEID, DATATYPE FROM $db_name.$view_db_qg;
 
-CREATE VIEW $db_name.$view_db_qg_restricted AS (SELECT * FROM $hive_database_qg.trends@$server_object_db);
+CREATE VIEW $db_name.$view_db_qg_restricted AS (SELECT * FROM $(echo "${landlord}_${tenant}_${environment}_d_mtd" | tr '[:upper:]' '[:lower:]').audit@$server_object_db);
 SELECT COUNT(*) FROM $db_name.$view_db_qg_restricted;
 SELECT * FROM $db_name.$view_db_qg_restricted;
 

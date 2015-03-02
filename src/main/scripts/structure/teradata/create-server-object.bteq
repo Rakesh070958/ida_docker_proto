@@ -7,7 +7,7 @@ bteq << EOF
 * author: Ana - Maria MUSAT
 */
 
-.width 200;
+.width 300;
 .set errorout stdout;
 
 
@@ -22,7 +22,7 @@ CREATE FOREIGN SERVER TD_SERVER_DB.$server_object_db USING
 	port('$hive_metastore_port') /* hive metastore port */
 	hiveport('$hive_port') /* Hive Server 2 port */
 	username ('$hive_username') /* the user impersonated by tduser */
-    dbname('$hive_database_qg') /* the hive database to be used */
+    dbname('$(echo "${landlord}_${tenant}_${environment}_d_mtd" | tr '[:upper:]' '[:lower:]')') /* the hive database to be used */
     templeton_port('$hive_templeton_port') /* WebHCatalog port */
 DO IMPORT WITH SYSLIB.LOAD_FROM_HCATALOG USING
 	transformformatting ('true')

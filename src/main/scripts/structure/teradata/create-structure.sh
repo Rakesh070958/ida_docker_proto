@@ -34,7 +34,6 @@ function createTeradataStructure {
 
 			sh ./teradata/create-env.bteq >> td.log
 			sh ./teradata/create-env-roles.bteq >> td.log
-			#sh ./teradata/create-env-user.bteq >> td.log
 			echo "$(COL "Teradata: Creating the databases ---------------------------------" 32)"
 			for database in $databases; do
 				echo "$(COL "Teradata: Creating the database ----------------------------------" 32)"
@@ -45,12 +44,10 @@ function createTeradataStructure {
 				sh ./teradata/create-db-roles.bteq >> td.log
 				sh ./teradata/create-db-user.bteq >> td.log
 				sh ./teradata/create-db-table.bteq >> td.log
-				
-			    echo "$(COL "Teradata: Creating the hive databases ----------------------------" 32)"
-				echo "$(COL "Hive database: $hive_database_qg" 34)"
-				hive -e "\"CREATE DATABASE IF NOT EXISTS $hive_database_qg;\"" >> td.log
 			
 				echo "$(COL "Teradata: Working with QueryGrid ---------------------------------" 32)"
+				export tenant
+				export environment
 				sh ./teradata/create-server-object.bteq >> td.log
 				sh ./teradata/validate-server-object.bteq >> td.log
 				sh ./teradata/validate-querygrid.bteq >> td.log

@@ -7,19 +7,19 @@ bteq << EOF
 * author: Ana - Maria MUSAT
 */
 
-.width 200;
+.width 300;
 .set errorout stdout;
 
-select 1 from dbc.tables where DatabaseName='$db_name' and TableName='trends' and TableKind='T';
-.IF ACTIVITYCOUNT=0 THEN .GOTO SkipDropTableTrends
-DROP TABLE $db_name.trends;
+select 1 from dbc.tables where DatabaseName='$db_name' and TableName='audit' and TableKind='T';
+.IF ACTIVITYCOUNT=0 THEN .GOTO SkipDropTableAudit
+DROP TABLE $db_name.audit;
 
-.LABEL SkipDropTableTrends
+.LABEL SkipDropTableAudit
 select 1 from dbc.tables where DatabaseName='$db_name' and TableName='$table_db_qg' and TableKind='T';
-.IF ACTIVITYCOUNT=0 THEN .GOTO SkipDropTableTrendsQG
+.IF ACTIVITYCOUNT=0 THEN .GOTO SkipDropTableAuditQG
 DROP TABLE $db_name.$table_db_qg;
 
-.LABEL SkipDropTableTrendsQG
+.LABEL SkipDropTableAuditQG
 select 1 from dbc.tables where DatabaseName='$db_name' and TableName='$view_db_qg' and TableKind='V';
 .IF ACTIVITYCOUNT=0 THEN .GOTO SkipDropView
 DROP VIEW $db_name.$view_db_qg;
