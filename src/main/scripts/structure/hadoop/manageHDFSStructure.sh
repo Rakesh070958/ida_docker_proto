@@ -83,7 +83,8 @@ function createHDFSStructure {
 			user="${LANDLORD}_${tenant}_etl_usr"
 			echo -e "\t- give user [ $(COL $user 32) ] full access unde hdfs://$DATALAKE_ROOT/$LANDLORD/${LANDLORD}_$tenant/" 
 			# Then full access under the structure
-			su hdfs -c "hadoop fs -setfacl -m user:$user:--x hdfs://$DATALAKE_ROOT/$LANDLORD"
+			su hdfs -c "hadoop fs -setfacl -m user:$user:--x hdfs://$DATALAKE_ROOT/"
+			su hdfs -c "hadoop fs -setfacl -m user:$user:rwx hdfs://$DATALAKE_ROOT/$LANDLORD"
 			su hdfs -c "hadoop fs -setfacl -R -m user:$user:rwx hdfs://$DATALAKE_ROOT/$LANDLORD/${LANDLORD}_$tenant/"
 			su hdfs -c "hadoop fs -setfacl -R -m default:user:$user:rwx hdfs://$DATALAKE_ROOT/$LANDLORD/${LANDLORD}_$tenant/"
 		
