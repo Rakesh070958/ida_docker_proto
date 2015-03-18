@@ -10,8 +10,6 @@ echo Tenant=$tenant
 echo Landlord Tenant=$landlord_tenant
 
 #echo --------PROFILES-----------
-#M0=M0
-#H0=H0
 profile_tenant=@settings.tenant.profile_tenant@
 echo Profile Tenant = $profile_tenant
 

@@ -33,6 +33,12 @@ CREATE USER $landlord_tenant FROM  $landlord  AS
         DATEFORM  =  ANSIDATE,
         DEFAULT CHARACTER SET UNICODE;
 
+/* 
+ * Modify the password - 
+ * this ensures that it won't be necessary to change the password at the first login 
+ */
+MODIFY USER $landlord_tenant AS PASSWORD = pass_1234;
+
 /*
 * now give the right to create users to the landlord and revoke it from the newly instantiated project user
 */
@@ -44,13 +50,13 @@ GRANT CREATE USER, CREATE DATABASE, DROP USER, DROP DATABASE ON $landlord_tenant
 
 /*
 *local administrators should not have rights for creating or dropping users
-*REVOKE CREATE USER, DROP USER ON $landlord_tenant FROM $landlord_tenant;
 */
+REVOKE CREATE USER, DROP USER ON $landlord_tenant FROM $landlord_tenant;
 
 /* create role '$ro_tenant_admin' */
 CREATE ROLE $ro_tenant_admin;
 
-/* create role '$ro_tenant_admin' */
+/* create role '$ro_tenant_select' */
 CREATE ROLE $ro_tenant_select;
 
 /*
@@ -62,8 +68,7 @@ GRANT ALL BUT CREATE USER,DROP USER ON $landlord_tenant TO $ro_landlord_admin;
 /*
 * GRANT rights to ADMINISTRATOR role - for the tenant
 */
-GRANT ALL BUT CREATE USER,DROP USER ON $landlord_tenant TO $ro_tenant_admin;
-
+GRANT ALL BUT CREATE USER, DROP USER ON $landlord_tenant TO $ro_tenant_admin;
 
 /*
 * GRANT select rights to the select role - for the tenant

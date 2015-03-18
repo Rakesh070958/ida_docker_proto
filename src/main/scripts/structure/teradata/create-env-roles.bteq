@@ -26,7 +26,7 @@ GRANT SELECT ON $env_name TO $ro_tenant_select;
 /*
 * GRANT rights to role
 */ 
-GRANT ALL BUT CREATE DATABASE,DROP DATABASE,CREATE USER,DROP USER ON $env_name TO $ro_name;
+GRANT ALL BUT CREATE DATABASE, DROP DATABASE, CREATE USER, DROP USER ON $env_name TO $ro_name;
 
 .LOGOFF;
 .QUIT;

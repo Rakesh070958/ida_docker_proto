@@ -42,7 +42,8 @@ GRANT ALL ON $landlord TO $superuser WITH GRANT OPTION;
 GRANT CREATE USER, CREATE DATABASE, DROP USER, DROP DATABASE ON $landlord TO $superuser WITH GRANT OPTION;
 
 /*
-local administrators should not have rights for creating or dropping users
+* local administrators should not have rights for creating or dropping users
+*/
 REVOKE CREATE USER, DROP USER ON $landlord FROM $landlord;
 
 /*
@@ -75,7 +76,7 @@ PRIMARY INDEX scriptfile (script_file);
 
 GRANT SELECT, INSERT ON $landlord.projectlog TO $ro_landlord_admin;
 
-INSERT INTO $landlord.projectlog VALUES ('1_create_tenant.bteq', '2014-12-09', 'CREATE PROJECT SKELETON');
+INSERT INTO $landlord.projectlog VALUES ('create_tenant.bteq', '2015-02-20', 'CREATE PROJECT SKELETON');
 
 .LABEL SkipCreateProjectlogTable
 

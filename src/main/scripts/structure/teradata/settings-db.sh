@@ -16,7 +16,6 @@ hive_database_qg=@settings.tenant.environment.database.hive_database_qg@
 view_db_qg=@settings.tenant.environment.database.view_db_qg@
 view_db_qg_restricted=@settings.tenant.environment.database.view_db_qg_restricted@
 db_perm_space=@settings.tenant.environment.database.db_perm_space@
-#hive_username="$(echo ${landlord}_${tenant} | tr '[:upper:]' '[:lower:]')_etl_usr"
 hive_username=@settings.tenant.environment.database.hive_username@
 
 export db_name

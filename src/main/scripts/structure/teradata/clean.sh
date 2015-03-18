@@ -15,7 +15,7 @@ function cleanTDStructures {
 	echo "$(COL "Databases: $databases" 34)"
 	
 	for tenant in $tenants; do
-               	source ./teradata/settings-tenant.sh >> td.log
+        source ./teradata/settings-tenant.sh >> td.log
 
 		for environment in $environments; do
 			source ./teradata/settings-env.sh >> td.log
