@@ -6,7 +6,7 @@ bteq << EOF
 */
 
 .LOGON $servername/$superuser,$superuser_password;
-
+ 
 .width 200;
 .set errorout stdout;
 
