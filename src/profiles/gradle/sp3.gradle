@@ -1,9 +1,0 @@
-/*
- * This file contains all customizations needed for building the project for sp3
- *
- * author: Dumitru Ciubenco
- * created: 23.01.2015
- */
-
-ext.profile = 'SP3'
-ext.hostname = 'sp3.hostname'
