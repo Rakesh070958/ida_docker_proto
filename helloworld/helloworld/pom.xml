@@ -1,0 +1,37 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.tedeso</groupId>
+  <artifactId>iTBCodeGeneratorV3</artifactId>
+  <packaging>jar</packaging>
+  <name>Maven core</name>
+  <version>1.0.3</version>
+  <description>Tedeso plugin jar ITB</description>
+  <url>http://maven.apache.org</url>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <scm>
+    <url>http://svn.apache.org/viewcvs.cgi/maven</url>
+    <connection>http://svn.apache.org/viewcvs.cgi/maven</connection>
+  </scm>
+  <developers>
+    <developer>
+      <id>IC009965</id>
+      <name>tecjavateam</name>
+      <email>pradeep.menon@siemens.com</email>
+    </developer>
+  </developers>
+  <dependencies>
+  </dependencies>
+<!-- 
+  <repositories>
+<repository>http://172.16.32.121:8080/nexus-2.3.1-01/content/repositories</repository>
+	</repositories>
+
+  <pluginRepositories></pluginRepositories>
+-->
+  </project>
