@@ -1,11 +1,11 @@
 <project>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.tedeso</groupId>
-  <artifactId>iTBCodeGeneratorV3</artifactId>
-  <packaging>jar</packaging>
+  <groupId>com.dockerida</groupId>
+  <artifactId>helloWorld</artifactId>
+  <packaging>war</packaging>
   <name>Maven core</name>
-  <version>1.0.3</version>
-  <description>Tedeso plugin jar ITB</description>
+  <version>0.1-dev</version>
+  <description>Sample war file for docker</description>
   <url>http://maven.apache.org</url>
   <licenses>
     <license>
@@ -20,18 +20,15 @@
   </scm>
   <developers>
     <developer>
-      <id>IC009965</id>
+      <id>IC070958</id>
       <name>tecjavateam</name>
-      <email>pradeep.menon@siemens.com</email>
+      <email>rakesh.rajpurohit@siemens.com</email>
     </developer>
   </developers>
   <dependencies>
   </dependencies>
-<!-- 
   <repositories>
-<repository>http://172.16.32.121:8080/nexus-2.3.1-01/content/repositories</repository>
-	</repositories>
-
+	<repository>http://172.17.26.26:49156/nexus-latest/content/repositories/releases/</repository>
+   </repositories>
   <pluginRepositories></pluginRepositories>
--->
   </project>
