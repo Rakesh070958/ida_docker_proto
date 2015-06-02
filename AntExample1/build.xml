@@ -50,4 +50,5 @@
 			<arg value="-DpomFile=pom.xml" />
 			<arg value="-Dfile=${AntExample-war}" />
 		</artifact:mvn>
-        </target>project>
+        </target>
+</project>
