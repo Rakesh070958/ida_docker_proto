@@ -50,6 +50,6 @@
 			<arg value="-Durl=${maven-snapshots-repository-url}" />
 			<arg value="-DrepositoryId=${maven-snapshots-repository-id}" />
 			<arg value="-DpomFile=pom.xml" />
-			<arg value="-Dfile=${tedeso-jar}" />
+			<arg value="-Dfile=${AntExample1.war}" />
 		</artifact:mvn>
         </target>project>
