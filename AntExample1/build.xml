@@ -30,5 +30,26 @@
 		<delete dir="dist" />
 		<delete dir="build" />
 	</target>
+
+
+
+
 	
-</project>
+        <property name="groupId" value="com.docker" />
+	<property name="artifactId" value"=AntExample1" />
+	<property name="version" value="1.0.3" />
+
+      <!-- define artifacts' name, which follows the convention of Maven -->
+	<property name="docker-war" value="/jenkins/jobs/docker_freestyle/workspace/AntExample1/dist/${artifactId}.war" />
+	<!-- defined maven snapshots and staging repository id and url -->
+	<property name="maven-snapshots-repository-id" value="sonatype-nexus-snapshots" />
+	<property name="maven-snapshots-repository-url" value=" http:/172.17.26.65:49156/nexus-latest/content/repositories/snapshots" />
+        <target name="deploy" description="deploy snapshot version to Maven snapshot repository">
+		<artifact:mvn>
+			<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.6:deploy-file" />
+			<arg value="-Durl=${maven-snapshots-repository-url}" />
+			<arg value="-DrepositoryId=${maven-snapshots-repository-id}" />
+			<arg value="-DpomFile=pom.xml" />
+			<arg value="-Dfile=${tedeso-jar}" />
+		</artifact:mvn>
+        </target>project>
