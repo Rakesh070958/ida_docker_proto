@@ -36,7 +36,7 @@
 
 	
         <property name="groupId" value="com.docker" />
-	<property name="artifactId" value="AntExample1" />
+	<property name="artifactId" value="AntExample" />
 	<property name="version" value="1.0.3" />
 
       <!-- define artifacts' name, which follows the convention of Maven -->
@@ -50,6 +50,6 @@
 			<arg value="-Durl=${maven-snapshots-repository-url}" />
 			<arg value="-DrepositoryId=${maven-snapshots-repository-id}" />
 			<arg value="-DpomFile=pom.xml" />
-			<arg value="-Dfile=${AntExample1.war}" />
+			<arg value="-Dfile=${AntExample.war}" />
 		</artifact:mvn>
         </target>project>
