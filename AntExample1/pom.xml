@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<project>
+<modelVersion>4.0.0</modelVersion>
+  <groupId>com.docker</groupId>
+  <artifactId>AntExample.war</artifactId>
+  <packaging>war</packaging>
+  <name>Maven core</name>
+  <version>1.0.3</version>
+  <description>Docker plugin war </description>
+  <url>http://maven.apache.org</url>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <scm>
+    <url>http://svn.apache.org/viewcvs.cgi/maven</url>
+    <connection>http://svn.apache.org/viewcvs.cgi/maven</connection>
+  </scm>
+  <developers>
+    <developer>
+    </developer>
+  </developers>
+  <dependencies>
+  </dependencies>
+
+  <repositories>
+<repository>http://172.17.26.65:49156/nexus-latest/content/repositories/snapshots/</repository>
+	</repositories>
+
+  <pluginRepositories></pluginRepositories>
+
+</project>
