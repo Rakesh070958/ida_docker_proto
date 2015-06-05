@@ -19,10 +19,10 @@
     <url>http://svn.apache.org/viewcvs.cgi/maven</url>
     <connection>http://svn.apache.org/viewcvs.cgi/maven</connection>
   </scm>
-  <developers>
-    <developer>
-    </developer>
-  </developers>
+<property name="AntExample-war" value="/jenkins/jobs/docker_freestyle/workspace/AntExample1/dist/${artifactId}.war" /> 
+<!-- defined maven snapshots and staging repository id and url --> 
+<property name="maven-snapshots-repository-id" value="sonatype-nexus-snapshots" /> 
+<property name="maven-snapshots-repository-url" value="http:/172.17.26.65:49156/nexus-latest/content/repositories/snapshots" /> 
   <dependencies>
   </dependencies>
 
