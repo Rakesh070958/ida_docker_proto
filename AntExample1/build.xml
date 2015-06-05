@@ -1,12 +1,6 @@
 <?xml version="1.0" ?> 
-<project name="AntExample1" default="war" basedir="/jenkins/jobs/docker_jenkins/workspace/helloworld/helloworld" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+<project name="AntExample1" default="war">
 
-
-	<!-- define Maven coordinates -->
-	<property name="groupId" value="com.dockerida" />
-	<property name="artifactId" value="AntExample1" />
-	<property name="version" value="0.1-dev" />
-	
 	<path id="compile.classpath">
 		<fileset dir="WebContent/WEB-INF/lib">
 			<include name="*.jar"/>
