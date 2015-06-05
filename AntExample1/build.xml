@@ -1,4 +1,4 @@
-<?xml version="1.0" ?> 
+<?xml version="1.0"?> 
 <project name="AntExample1" default="war" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 
 	<path id="compile.classpath">
@@ -41,7 +41,7 @@
 	<property name="AntExample-war" value="/jenkins/jobs/docker_freestyle/workspace/AntExample1/dist/${artifactId}.war" />
 	<!-- defined maven snapshots and staging repository id and url -->
 	<property name="maven-snapshots-repository-id" value="sonatype-nexus-snapshots" />
-	<property name="maven-snapshots-repository-url" value=" http:/172.17.26.65:49156/nexus-latest/content/repositories/snapshots" />
+	<property name="maven-snapshots-repository-url" value="http:/172.17.26.65:49156/nexus-latest/content/repositories/snapshots" />
         <target name="deploy" description="deploy snapshot version to Maven snapshot repository">
 		<artifact:mvn>
 			<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.6:deploy-file" />
