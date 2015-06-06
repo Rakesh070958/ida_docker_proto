@@ -1,38 +1,35 @@
-<?xml version="1.0"?> 
-<project name="AntExample1" default="war" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+<?xml version="1.0" ?>  
+ <project name="AntExample1" default="war" basedir="."> 
+     <path id="compile.classpath"> 
+         <fileset dir="WebContent/WEB-INF/lib"> 
+             <include name="*.jar"/> 
+         </fileset> 
+     </path>
+     
+     <target name="clean"> 
+         <delete dir="dist" /> 
+         <delete dir="build" /> 
+     </target>
+  
+     <target name="init" depends="clean"> 
+         <mkdir dir="build/classes"/> 
+         <mkdir dir="dist" /> 
+     </target> 
+      
+     <target name="compile" depends="init, clean" > 
+         <javac destdir="build/classes" debug="true" srcdir="src" includeantruntime="false"> 
+             <classpath refid="compile.classpath"/> 
+         </javac> 
+     </target> 
+      
+     <target name="war" depends="compile"> 
+         <war destfile="dist/AntExample.war" webxml="WebContent/WEB-INF/web.xml"> 
+             <fileset dir="WebContent"/> 
+             <lib dir="WebContent/WEB-INF/lib"/> 
+             <classes dir="build/classes"/> 
+         </war> 
+     </target> 
 
-	<path id="compile.classpath">
-		<fileset dir="WebContent/WEB-INF/lib">
-			<include name="*.jar"/>
-		</fileset>
-	</path>
-	
-	<target name="init">
-		<mkdir dir="build/classes"/>
-		<mkdir dir="dist" />
-	</target>
-	
-	<target name="compile" depends="init" >
-		<javac destdir="build/classes" debug="true" srcdir="src">
-			<classpath refid="compile.classpath"/>
-		</javac>
-	</target>
-	
-	<target name="war" depends="compile">
-		<war destfile="dist/AntExample.war" webxml="WebContent/WEB-INF/web.xml">
-			<fileset dir="WebContent"/>
-			<lib dir="WebContent/WEB-INF/lib"/>
-			<classes dir="build/classes"/>
-		</war>
-	</target>
-	
-	<target name="clean">
-		<delete dir="dist" />
-		<delete dir="build" />
-	</target>
-
-
-	
         <property name="groupId" value="com.docker" />
 	<property name="artifactId" value="AntExample" />
 	<property name="version" value="1.0.3" />
@@ -42,12 +39,18 @@
 	<!-- defined maven snapshots and staging repository id and url -->
 	<property name="maven-snapshots-repository-id" value="sonatype-nexus-snapshots" />
 	<property name="maven-snapshots-repository-url" value="http:/172.17.26.65:49156/nexus-latest/content/repositories/snapshots" />
-        <target name="deploy" description="deploy snapshot version to Maven snapshot repository">
+
+
+
+        <target name="deploy" description="deploy snapshot version to Maven snapshot repository" depends="clean, init, war">
 		<artifact:mvn>
 			<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.6:deploy-file" />
 			<arg value="-Durl=${maven-snapshots-repository-url}" />
 			<arg value="-DrepositoryId=${maven-snapshots-repository-id}" />
-			<arg value="-DpomFile=pom.xml" />
+			<arg value="-DgroupId=${groupId}" />
+			<arg value="-DartifactId=${artifactId}" />
+			<arg value="-Dversion=${version}" />
+			<arg value="-Dpackaging=war" />
 			<arg value="-Dfile=${AntExample-war}" />
 		</artifact:mvn>
         </target>
