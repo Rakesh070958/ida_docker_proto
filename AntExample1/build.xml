@@ -6,7 +6,7 @@
          </fileset> 
      </path>
      
-     <target name="clean"> 
+     <target name="delete"> 
          <delete dir="dist" /> 
          <delete dir="build" /> 
      </target>
