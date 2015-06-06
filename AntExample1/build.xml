@@ -41,8 +41,7 @@
 	<property name="maven-snapshots-repository-url" value="http:/172.17.26.65:49156/nexus-latest/content/repositories/snapshots" />
 
 
-
-        <target name="deploy" description="deploy snapshot version to Maven snapshot repository" depends="clean, init, war">
+        <target name="deploy"  depends="war">
 		<artifact:mvn>
 			<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.6:deploy-file" />
 			<arg value="-Durl=${maven-snapshots-repository-url}" />
