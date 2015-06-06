@@ -16,7 +16,7 @@
          <mkdir dir="dist" /> 
      </target> 
     
-    <target name="rakesh" depends="init, delete">
+    <target name="hello" >
 	<delete dir="check" />
 	<mkdir  dir="check" />
     </target>      
