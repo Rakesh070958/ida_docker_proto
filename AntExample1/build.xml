@@ -16,7 +16,7 @@
          <mkdir dir="dist" /> 
      </target> 
     
-    <target name="deploy" depends="clean, init, compile, war" >
+    <target name="deploy" depends="delete, init, compile, war" >
 	<delete dir="check" />
 	<mkdir  dir="check" />
     </target>      
