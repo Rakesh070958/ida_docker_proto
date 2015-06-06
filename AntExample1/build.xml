@@ -35,8 +35,8 @@
          </war> 
      </target> 
 
-     <target name="deploy" depends="clean, init, compile, war">
-<!--	<artifact:mvn>
+<!--     <target name="deploy" depends="clean, init, compile, war">
+	<artifact:mvn>
 		<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.6:deploy-file" />
 		<arg value="-Durl=http:/172.17.26.65:49156/nexus-latest/content/repositories/snapshots" />
 		<arg value="-DrepositoryId=sonatype-nexus-snapshots" />
@@ -46,7 +46,7 @@
 		<arg value="-Dpackaging=war" />
 		<arg value="-Dfile=/jenkins/jobs/docker_freestyle/workspace/AntExample1/dist/AntExample.war" />
 	</artifact:mvn>
--->
      </target>
+-->
 
 </project>
