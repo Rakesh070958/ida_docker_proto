@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>  
- <project name="AntExample1" default="war" basedir="."> 
+ <project name="AntExample1" default="war" basedir="." xmlns:artifact="antlib:org.apache.maven.artifact.ant" > 
      <path id="compile.classpath"> 
          <fileset dir="WebContent/WEB-INF/lib"> 
              <include name="*.jar"/> 
