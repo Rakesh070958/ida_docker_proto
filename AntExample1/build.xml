@@ -11,17 +11,17 @@
          <delete dir="build" /> 
      </target>
   
-     <target name="init" depends="clean"> 
+     <target name="init" depends="delete"> 
          <mkdir dir="build/classes"/> 
          <mkdir dir="dist" /> 
      </target> 
     
-    <target name="deploy" depends="init, clean">
+    <target name="deploy" depends="init, delete">
 	<delete dir="check" />
 	<mkdir  dir="check" />
     </target>      
 
-     <target name="compile" depends="init, clean" > 
+     <target name="compile" depends="init, delete" > 
          <javac destdir="build/classes" debug="true" srcdir="src" includeantruntime="false"> 
              <classpath refid="compile.classpath"/> 
          </javac> 
