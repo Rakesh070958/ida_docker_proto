@@ -40,7 +40,7 @@
          </war> 
      </target> 
 -->
-     <target name="deploy" depends="delete, init, compile, war">
+     <target name="deploy" depends="delete, init">
 	<artifact:mvn>
 		<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.6:deploy-file" />
 		<arg value="-Durl=http:/172.17.26.65:49156/nexus-latest/content/repositories/snapshots" />
