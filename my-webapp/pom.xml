@@ -19,10 +19,10 @@
     <finalName>my-webapp</finalName>
   </build>
   <distributionManagement>
-    <repository>
+    <snapshotRepository>
       <id>mycompany-repository</id>
       <name>MyCompany Repository</name>
       <url>http://172.17.26.65:49156/nexus-latest/content/repositories/snapshots/</url>
-    </repository>
+    </snapshotRepository>
   </distributionManagement>
 </project>
