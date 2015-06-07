@@ -21,7 +21,7 @@
   <distributionManagement>
     <snapshotRepository>
       <id>snapshots</id>
-      <name>MyCompany Repository</name>
+      <name>Snapshots</name>
       <url>http://172.17.26.65:49163/nexus-latest/content/repositories/snapshots</url>
     </snapshotRepository>
   </distributionManagement>
