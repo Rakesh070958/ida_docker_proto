@@ -7,6 +7,7 @@
   <version>1.0-SNAPSHOT</version>
   <name>my-webapp Maven Webapp</name>
   <url>http://maven.apache.org</url>
+
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -18,11 +19,12 @@
   <build>
     <finalName>my-webapp</finalName>
   </build>
-  <distributionManagement>
-    <snapshotRepository>
-      <id>snapshots</id>
-      <name>Snapshots</name>
-      <url>http://172.17.26.65:49163/nexus-latest/content/repositories/snapshots</url>
-    </snapshotRepository>
-  </distributionManagement>
+
+<distributionManagement>
+  <snapshotRepository>
+    <id>snapshots</id>
+    <url>http://172.17.26.65:49163/nexus-latest/content/repositories/snapshots</url>
+  </snapshotRepository>
+</distributionManagement>
+
 </project>
