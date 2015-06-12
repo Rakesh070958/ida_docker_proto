@@ -23,7 +23,7 @@
 <distributionManagement>
   <snapshotRepository>
     <id>snapshots</id>
-    <url>http://172.17.26.65:49163/nexus-latest/content/repositories/snapshots</url>
+    <url>http://172.17.26.65:49154/nexus-latest/content/repositories/snapshots</url>
   </snapshotRepository>
 </distributionManagement>
 
